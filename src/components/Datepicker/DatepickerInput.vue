@@ -3,7 +3,12 @@
 		<label>
 			Datepicker
 		</label>
-		<input type="text" />
+		<input
+			type="text"
+			:placeholder="placeholder"
+			:value="date"
+			@change="setDateValue"
+		/>
 		<button
 			type="button"
 			name="datepickerButton"
@@ -16,8 +21,28 @@
 <script>
 export default {
 	name: "datepickerInput",
+	props: {
+		placeholder: {
+			type: String,
+			default() {
+				return "Pick a date";
+			}
+		},
+		date: {
+			type: String,
+			default() {
+				return "";
+			}
+		}
+	},
 	data() {
 		return {};
+	},
+	methods: {
+		setDateValue: _.debounce(function($event) {
+			let dateValue = $event.target.value;
+			this.$emit("update:datepickerinput", dateValue);
+		}, 500)
 	}
 };
 </script>

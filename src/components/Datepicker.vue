@@ -1,14 +1,32 @@
 <template>
 	<div class="datepicker-wrapper">
-		<datepicker-input @focus="togglePopupView"></datepicker-input>
+		<datepicker-input
+			:value="value"
+			:date="datepickerOptions.date"
+			:auto-pick="autoPick"
+			@update:datepickerinput="updateDatepickerInput"
+			@focus="toggleInputFocus"
+		></datepicker-input>
+		<datepicker-popover v-show="isFocused && showPopover">
+			<datepicker-calendar></datepicker-calendar>
+		</datepicker-popover>
 	</div>
 </template>
 
 <script>
 import DatepickerInput from "@components/Datepicker/DatepickerInput.vue";
+import DatepickerPopover from "@components/Datepicker/DatepickerPopover.vue";
+import DatepickerCalendar from "@components/Datepicker/DatepickerCalendar.vue";
+
 export default {
 	name: "Datepicker",
 	props: {
+		value: {
+			type: String,
+			default() {
+				return "";
+			}
+		},
 		options: {
 			/*
 				Default options: {
@@ -94,21 +112,50 @@ export default {
 		}
 	},
 	components: {
-		DatepickerInput
+		DatepickerInput,
+		DatepickerPopover,
+		DatepickerCalendar
 	},
 	data() {
 		return {
-			showPopup: false
+			isFocused: false
 		};
 	},
+	computed: {
+		showPopover() {
+			let showPopover = this.inline ? false : this.isFocused;
+			showPopover = this.autoShow ? true : showPopover;
+
+			return showPopover;
+		},
+		datepickerOptions() {
+			let defaultOptions = {
+				date: this.value || null,
+				format: "MM/DD/YYYY",
+				startDate: null,
+				endDate: null,
+				language: "en",
+				startView: 0,
+				weekStart: 0,
+				offset: 0,
+				zIndex: 1000
+			};
+			let finalOptions = { ...defaultOptions, ...this.options };
+			return finalOptions;
+		}
+	},
 	methods: {
-		togglePopupView() {
-			this.showPopup = this.inline ? false : !this.showPopup;
+		updateDatepickerInput(date) {
+			this.$emit("input", date);
+		},
+		toggleInputFocus() {
+			this.isFocused = !this.isFocused;
 			this.$nextTick(() => {
 				// do something
 			});
 		}
-	}
+	},
+	watch: {}
 };
 </script>
 <style lang="scss"></style>

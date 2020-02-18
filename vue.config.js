@@ -18,7 +18,8 @@ module.exports = {
         "@components": path.resolve(__dirname, "src/components/"),
         "@store": path.resolve(__dirname, "src/store/"),
         "@assets": path.resolve(__dirname, "src/assets/"),
-        "@sass": path.resolve(__dirname, "src/sass/")
+        "@sass": path.resolve(__dirname, "src/sass/"),
+        "@helpers": path.resolve(__dirname, "src/helpers/")
       }
     },
     devServer: {
