@@ -16,7 +16,7 @@
 		<datepicker-popover
 			style="background: red;"
 			@mouseover.native="isPopoverHovered = true"
-			v-click-outside="turnOffPopoverHover"
+			v-click-outside.native="turnOffPopoverHover"
 			v-show="
 				(isPopoverShown || isPopoverShownOnClick) && !isContainerShown
 			"
@@ -126,7 +126,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return true;
+				return false;
 			}
 		},
 		autoPick: {
@@ -156,7 +156,7 @@ export default {
 	},
 	data() {
 		return {
-			isFocused: false,
+			isFocused: this.autoShow === true,
 			isPopoverShownOnClick: false,
 			isPopoverHovered: false
 		};
@@ -178,9 +178,9 @@ export default {
 			Returns Boolean.
 		*/
 		isPopoverShown() {
-			let isPopoverShown = this.inline ? false : this.isFocused;
-			isPopoverShown = this.autoShow ? true : isPopoverShown;
+			let isPopoverShown = this.inline === true;
 			isPopoverShown = this.isFocused ? true : isPopoverShown;
+			// isPopoverShown = this.isFocused ? isPopoverShown : this.autoShow;
 
 			return isPopoverShown || this.isPopoverHovered;
 		},
@@ -231,17 +231,35 @@ export default {
 		turnOffPopoverHover($event) {
 			this.isPopoverHovered = false;
 			this.$nextTick(() => {
-				if (this.trigger && $event && $event.target) {
+				if ($event && $event.target) {
 					const targetClass = String($event.target.className);
-					const prevent = ["btn-datepicker", "btn-datepicker-icon"];
-					let hasSlices = _.intersection(
-						prevent,
-						targetClass.split(" ")
-					).length;
-					if (!hasSlices) {
-						this.isPopoverShownOnClick = !this
-							.isPopoverShownOnClick;
+					if (this.trigger) {
+						let prevent = ["btn-datepicker", "btn-datepicker-icon"];
+						let hasSlices = _.intersection(
+							prevent,
+							targetClass.split(" ")
+						).length;
+						if (!hasSlices) {
+							this.isPopoverShownOnClick = !this
+								.isPopoverShownOnClick;
+						}
+					} else {
+						let prevent = [
+							"btn-datepicker",
+							"btn-datepicker-icon",
+							"datepicker-input"
+						];
+						let hasSlices = _.intersection(
+							prevent,
+							targetClass.split(" ")
+						).length;
+
+						if (!hasSlices) {
+							this.isFocused = false;
+						}
 					}
+				} else {
+					// do something
 				}
 			});
 		},

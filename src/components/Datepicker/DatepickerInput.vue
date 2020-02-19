@@ -5,6 +5,7 @@
 		</label>
 		<input
 			type="text"
+			class="datepicker-input"
 			:placeholder="placeholder"
 			:value="date"
 			:readonly="trigger"

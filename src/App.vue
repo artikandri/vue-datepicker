@@ -1,6 +1,10 @@
 <template>
 	<div id="app">
-		<datepicker v-model="date"></datepicker>
+		<datepicker
+			v-model="date"
+			:auto-show="autoShow"
+			:auto-hide="autoHide"
+		></datepicker>
 	</div>
 </template>
 
@@ -16,6 +20,8 @@ export default {
 	},
 	data() {
 		return {
+			autoShow: true,
+			autoHide: true,
 			date: "09/10/2020"
 		};
 	}
