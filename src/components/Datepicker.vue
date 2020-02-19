@@ -1,15 +1,28 @@
 <template>
 	<div class="datepicker-wrapper">
+		<!--start of datepicker input-->
 		<datepicker-input
 			:value="value"
 			:date="datepickerOptions.date"
+			:trigger="trigger"
 			:auto-pick="autoPick"
+			@click:datepickerinputbutton="togglePopover"
 			@update:datepickerinput="updateDatepickerInput"
 			@focus="toggleInputFocus"
 		></datepicker-input>
-		<datepicker-popover v-show="isFocused && showPopover">
+		<!--end of datepicker input-->
+
+		<!--start of datepicker popover-->
+		<datepicker-popover v-show="isPopoverShown">
 			<datepicker-calendar></datepicker-calendar>
 		</datepicker-popover>
+		<!--end of datepicker popover-->
+
+		<!--start of datepicker container-->
+		<datepicker-container v-show="isContainerShown">
+			<datepicker-calendar></datepicker-calendar>
+		</datepicker-container>
+		<!--end of datepicker container-->
 	</div>
 </template>
 
@@ -17,6 +30,7 @@
 import DatepickerInput from "@components/Datepicker/DatepickerInput.vue";
 import DatepickerPopover from "@components/Datepicker/DatepickerPopover.vue";
 import DatepickerCalendar from "@components/Datepicker/DatepickerCalendar.vue";
+import DatepickerContainer from "@components/Datepicker/DatepickerContainer.vue";
 
 export default {
 	name: "Datepicker",
@@ -76,7 +90,8 @@ export default {
 		},
 		autoShow: {
 			/*
-				Shows the calendar popup on first load. Doesnt have any effect in inline view.
+				Shows the calendar popup on first load. 
+				Doesnt have any effect in inline view.
 			*/
 			type: Boolean,
 			default() {
@@ -85,7 +100,8 @@ export default {
 		},
 		autoHide: {
 			/*
-				Automatically hides the calendar popup after selecting the date. Doesnt have any effect in inline view.
+				Automatically hides the calendar popup after selecting the date. 
+				Doesnt have any effect in inline view.
 			*/
 			type: Boolean,
 			default() {
@@ -94,7 +110,7 @@ export default {
 		},
 		autoPick: {
 			/*
-				Automatically set today date as default date
+				Automatically set today date as default date. Only works on the first run.
 			*/
 			type: Boolean,
 			default() {
@@ -114,23 +130,49 @@ export default {
 	components: {
 		DatepickerInput,
 		DatepickerPopover,
-		DatepickerCalendar
+		DatepickerCalendar,
+		DatepickerContainer
 	},
 	data() {
 		return {
-			isFocused: false
+			isFocused: false,
+			isPopoverShownOnClick: false
 		};
 	},
+	mounted() {},
 	computed: {
-		showPopover() {
-			let showPopover = this.inline ? false : this.isFocused;
-			showPopover = this.autoShow ? true : showPopover;
-
-			return showPopover;
+		/*
+			Shows/hides the container based on the inline and the container value.
+			Returns Boolean.
+		*/
+		isContainerShown() {
+			let isContainerShown = this.inline && this.container;
+			return isContainerShown;
 		},
+		/*
+			Shows/hides the popover based on the inline and the container value.
+			Returns Boolean.
+		*/
+		isPopoverShown() {
+			let isPopoverShown = this.inline ? false : this.isFocused;
+			isPopoverShown = this.autoShow ? true : isPopoverShown;
+			isPopoverShown =
+				(this.isFocused ? true : isPopoverShown) ||
+				this.isPopoverShownOnClick;
+
+			return isPopoverShown;
+		},
+		/*
+			Returns datepicker options based on the .
+			Returns Object.
+		*/
 		datepickerOptions() {
+			let defaultDateFormat = this.options.format || "MM/DD/YYYY";
+			let todayDate = moment().format(defaultDateFormat);
+			let dateValue =
+				this.value || (this.autoPick ? todayDate : null) || null;
 			let defaultOptions = {
-				date: this.value || null,
+				date: dateValue,
 				format: "MM/DD/YYYY",
 				startDate: null,
 				endDate: null,
@@ -148,8 +190,11 @@ export default {
 		updateDatepickerInput(date) {
 			this.$emit("input", date);
 		},
-		toggleInputFocus() {
-			this.isFocused = !this.isFocused;
+		togglePopover() {
+			this.isPopoverShownOnClick = !this.isPopoverShownOnClick;
+		},
+		toggleInputFocus(focusValue) {
+			this.isFocused = focusValue;
 			this.$nextTick(() => {
 				// do something
 			});

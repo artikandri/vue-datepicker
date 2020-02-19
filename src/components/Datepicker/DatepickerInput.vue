@@ -7,12 +7,15 @@
 			type="text"
 			:placeholder="placeholder"
 			:value="date"
+			@blur="toggleDatepickerInputFocus(false)"
+			@focus="toggleDatepickerInputFocus(true)"
 			@change="setDateValue"
 		/>
 		<button
 			type="button"
 			name="datepickerButton"
 			class="btn btn-datepicker"
+			@click="toggleDatepickerPopover"
 		>
 			<i class="la la-calendar" aria-hidden="true"></i>
 		</button>
@@ -39,6 +42,12 @@ export default {
 		return {};
 	},
 	methods: {
+		toggleDatepickerInputFocus(focusValue) {
+			this.$emit("focus", focusValue);
+		},
+		toggleDatepickerPopover() {
+			this.$emit("click:datepickerinputbutton");
+		},
 		setDateValue: _.debounce(function($event) {
 			let dateValue = $event.target.value;
 			this.$emit("update:datepickerinput", dateValue);

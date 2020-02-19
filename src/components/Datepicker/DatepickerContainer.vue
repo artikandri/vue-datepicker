@@ -1,6 +1,6 @@
 <template>
 	<div class="">
-		popover
+		container
 		<slot></slot>
 	</div>
 </template>
