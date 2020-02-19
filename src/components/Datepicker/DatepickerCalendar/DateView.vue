@@ -6,7 +6,10 @@
 					<button
 						class="btn btn-ghost btn-icon"
 						:disabled="!canChangeNavMonth(navDate, -1)"
-						@click="changeNavMonth(-1)"
+						@click="
+							changeNavMonth(-1);
+							setDates();
+						"
 					>
 						<i class="fa fa-chevron-left"></i>
 					</button>
@@ -20,7 +23,10 @@
 				<div
 					class="calendar-nav-next-month"
 					:disabled="!canChangeNavMonth(navDate, 1)"
-					@click="changeNavMonth(1)"
+					@click="
+						changeNavMonth(1);
+						setDates();
+					"
 				>
 					<button class="btn btn-ghost btn-icon">
 						<i class="fa fa-chevron-right"></i>
@@ -149,8 +155,13 @@ export default {
 					obj.value = i - initialEmptyCells + 1;
 					obj.available = true;
 				}
+
 				this.gridArr.push(obj);
 			}
+
+			this.$nextTick(() => {
+				this.$forceUpdate();
+			});
 		},
 		isAvailable(num) {
 			let dateToCheck = this.dateFromNum(num, this.navDate);
@@ -223,6 +234,13 @@ export default {
 						.format("ddd")
 				)
 			);
+		}
+	},
+	watch: {
+		value(val) {
+			if (val) {
+				this.setNavDateValue();
+			}
 		}
 	}
 };

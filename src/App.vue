@@ -27,15 +27,15 @@ export default {
 			options: {
 				language: "ja",
 				format: "DD/MM/YYYY",
-				startDate: "09/10/2010",
-				endDate: "09/10/2020"
+				startDate: "09/12/2020",
+				endDate: "09/03/2020"
 			},
 			container: false,
 			inline: false,
 			trigger: true,
 			autoShow: true,
 			autoHide: false,
-			date: "09/10/2020"
+			date: "09/02/2020"
 		};
 	}
 };

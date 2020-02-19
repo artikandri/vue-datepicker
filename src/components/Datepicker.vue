@@ -186,7 +186,6 @@ export default {
 		isPopoverShown() {
 			let isPopoverShown = this.inline === true;
 			isPopoverShown = this.isFocused ? true : isPopoverShown;
-			// isPopoverShown = this.isFocused ? isPopoverShown : this.autoShow;
 
 			return isPopoverShown || this.isPopoverHovered;
 		},
@@ -195,10 +194,40 @@ export default {
 			Returns Object.
 		*/
 		datepickerOptions() {
-			let defaultDateFormat = this.options.format || "MM/DD/YYYY";
+			let { startDate, endDate, format } = this.options;
+			let defaultDateFormat = format || "MM/DD/YYYY";
+
 			let todayDate = moment().format(defaultDateFormat);
-			let dateValue =
-				this.value || (this.autoPick ? todayDate : null) || null;
+			let autoPickDate = this.autoPick ? todayDate : null;
+			let dateValue = this.value || autoPickDate || null;
+
+			let isStartDateValid = startDate
+				? moment(startDate, format).isSameOrBefore(
+						moment(this.value, format)
+				  )
+				: true;
+			let isEndDateValid = endDate
+				? moment(endDate, format).isSameOrAfter(
+						moment(this.value, format)
+				  )
+				: true;
+
+			if (isStartDateValid && startDate) {
+				isEndDateValid = endDate
+					? moment(endDate, format).isSameOrAfter(
+							moment(startDate, format)
+					  )
+					: isEndDateValid;
+			}
+
+			if (isEndDateValid && endDate) {
+				isStartDateValid = startDate
+					? moment(startDate, format).isSameOrBefore(
+							moment(endDate, format)
+					  )
+					: isStartDateValid;
+			}
+
 			let defaultOptions = {
 				date: dateValue,
 				format: "MM/DD/YYYY",
@@ -210,7 +239,12 @@ export default {
 				offset: 0,
 				zIndex: 1000
 			};
-			let finalOptions = { ...defaultOptions, ...this.options };
+
+			let options = this.options;
+			options.startDate = isStartDateValid ? startDate : "";
+			options.endDate = isEndDateValid ? endDate : "";
+
+			let finalOptions = { ...defaultOptions, ...options };
 			return finalOptions;
 		}
 	},
@@ -239,8 +273,9 @@ export default {
 			this.$nextTick(() => {
 				if ($event && $event.target) {
 					const targetClass = String($event.target.className);
+					let prevent = ["btn-datepicker", "btn-datepicker-icon"];
+
 					if (this.trigger) {
-						let prevent = ["btn-datepicker", "btn-datepicker-icon"];
 						let hasSlices = _.intersection(
 							prevent,
 							targetClass.split(" ")
@@ -250,11 +285,7 @@ export default {
 							this.isFocused = false;
 						}
 					} else {
-						let prevent = [
-							"btn-datepicker",
-							"btn-datepicker-icon",
-							"datepicker-input"
-						];
+						prevent = prevent.concat(["datepicker-input"]);
 						let hasSlices = _.intersection(
 							prevent,
 							targetClass.split(" ")
@@ -276,9 +307,6 @@ export default {
 		},
 		toggleInputFocus(focusValue) {
 			this.isFocused = focusValue;
-			this.$nextTick(() => {
-				// do something
-			});
 		}
 	},
 	watch: {}

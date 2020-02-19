@@ -11,8 +11,8 @@
 			@click:dateButton="setStep"
 		/>
 		<month-view
-			:datepicker-options="datepickerOptions"
 			v-show="step == 1"
+			:datepicker-options="datepickerOptions"
 			@click:monthButton="setStep"
 		/>
 		<year-view v-show="step == 0" @click:yearButton="setStep" />
@@ -68,7 +68,6 @@ export default {
 			this.step = step;
 		},
 		setDateValue(dateValue) {
-			console.log(dateValue);
 			this.$emit("input:date", dateValue);
 		}
 	}
