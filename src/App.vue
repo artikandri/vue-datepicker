@@ -24,7 +24,12 @@ export default {
 	},
 	data() {
 		return {
-			options: {},
+			options: {
+				language: "ja",
+				format: "DD/MM/YYYY",
+				startDate: "09/10/2010",
+				endDate: "09/10/2020"
+			},
 			container: false,
 			inline: false,
 			trigger: true,

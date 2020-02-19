@@ -70,6 +70,12 @@
 export default {
 	name: "",
 	props: {
+		value: {
+			type: String,
+			default() {
+				return "";
+			}
+		},
 		datepickerOptions: {
 			type: Object,
 			default() {
@@ -77,9 +83,6 @@ export default {
 			}
 		},
 		yearFirst: {
-			/*
-				Show the year before the month's name in the calendar month view's title
-			*/
 			type: Boolean,
 			default() {
 				return false;
@@ -99,8 +102,11 @@ export default {
 			navDate: moment()
 		};
 	},
-	mounted() {
+	created() {
 		this.setDatepickerLocale();
+		this.setNavDateValue();
+	},
+	mounted() {
 		this.setWeekHeader();
 		this.setDates();
 	},
@@ -111,6 +117,15 @@ export default {
 		}
 	},
 	methods: {
+		setNavDateValue() {
+			this.navDate = this.value
+				? moment(this.value, this.datepickerOptions.format)
+				: moment();
+		},
+		setDatepickerLocale() {
+			let localeString = this.datepickerOptions.language || "en";
+			moment.locale(localeString);
+		},
 		setDates() {
 			this.gridArr = [];
 
@@ -149,15 +164,11 @@ export default {
 			let returnDate = moment(referenceDate);
 			return returnDate.date(num);
 		},
-		setDatepickerLocale() {
-			let localeString = this.datepickerOptions.language || "en";
-			moment.locale(localeString);
-		},
 		canChangeNavMonth(dateToCheck, num) {
 			const clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "month");
 
-			let canChangeNavMonth = false;
+			let canChange = false;
 
 			let { startDate, endDate, format } = this.datepickerOptions;
 			let formattedStartDate = startDate
@@ -170,22 +181,18 @@ export default {
 
 			if (formattedStartDate || formattedEndDate) {
 				if (formattedStartDate && formattedEndDate) {
-					canChangeNavMonth = clonedDate.isBetween(
-						startDate,
-						endDate
-					);
+					canChange = clonedDate.isBetween(startDate, endDate);
 				} else if (formattedStartDate && !formattedEndDate) {
-					canChangeNavMonth =
-						formattedClonedDate >= formattedStartDate;
+					canChange = formattedClonedDate >= formattedStartDate;
 				} else if (!formattedStartDate && formattedEndDate) {
-					canChangeNavMonth = formattedClonedDate <= formattedEndDate;
+					canChange = formattedClonedDate <= formattedEndDate;
 				} else {
-					canChangeNavMonth = false;
+					canChange = false;
 				}
 			} else {
-				canChangeNavMonth = true;
+				canChange = true;
 			}
-			return canChangeNavMonth;
+			return canChange;
 		},
 		changeNavMonth(num) {
 			if (this.canChangeNavMonth(this.navDate, num, "month")) {

@@ -1,12 +1,9 @@
 import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
-
-import momentMixin from "@mixins/momentMixin.js";
+import "moment/locale/id";
 
 Vue.config.productionTip = false;
-
-Vue.mixin("momentMixin", momentMixin);
 
 Vue.directive("click-outside", {
 	bind: function(el, binding, vnode) {

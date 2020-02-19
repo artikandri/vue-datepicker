@@ -2,6 +2,7 @@
 	<div class="datepicker-calendar calendar--wrapper">
 		<date-view
 			v-show="step == 2"
+			:value="value"
 			:datepicker-options="datepickerOptions"
 			:year-first="yearFirst"
 			:auto-hide="autoHide"
@@ -9,7 +10,11 @@
 			@click:date-item="$emit('click:date-item')"
 			@click:dateButton="setStep"
 		/>
-		<month-view v-show="step == 1" @click:monthButton="setStep" />
+		<month-view
+			:datepicker-options="datepickerOptions"
+			v-show="step == 1"
+			@click:monthButton="setStep"
+		/>
 		<year-view v-show="step == 0" @click:yearButton="setStep" />
 	</div>
 </template>
@@ -27,6 +32,12 @@ export default {
 		YearView
 	},
 	props: {
+		value: {
+			type: String,
+			default() {
+				return "";
+			}
+		},
 		datepickerOptions: {
 			type: Object,
 			default() {

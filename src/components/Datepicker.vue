@@ -20,6 +20,7 @@
 			v-show="showPopover"
 		>
 			<datepicker-calendar
+				:value="value"
 				@click:date-item="hidePopover"
 				@input:date="setDateValue"
 				:datepicker-options="datepickerOptions"
@@ -32,6 +33,7 @@
 		<!--start of datepicker container-->
 		<datepicker-container v-show="isContainerShown">
 			<datepicker-calendar
+				:value="value"
 				@click:date-item="hidePopover"
 				@input:date="setDateValue"
 				:datepicker-options="datepickerOptions"
@@ -200,10 +202,10 @@ export default {
 			let defaultOptions = {
 				date: dateValue,
 				format: "MM/DD/YYYY",
-				startDate: "10/01/2019",
-				endDate: "03/30/2020",
-				language: "jp",
-				startView: 2,
+				startDate: "",
+				endDate: "",
+				language: "en",
+				startView: 0,
 				weekStart: 0,
 				offset: 0,
 				zIndex: 1000
