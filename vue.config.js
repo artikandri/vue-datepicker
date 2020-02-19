@@ -19,7 +19,8 @@ module.exports = {
         "@store": path.resolve(__dirname, "src/store/"),
         "@assets": path.resolve(__dirname, "src/assets/"),
         "@sass": path.resolve(__dirname, "src/sass/"),
-        "@helpers": path.resolve(__dirname, "src/helpers/")
+        "@helpers": path.resolve(__dirname, "src/helpers/"),
+        "@mixins": path.resolve(__dirname, "src/mixins/")
       }
     },
     devServer: {

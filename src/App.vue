@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import "line-awesome/dist/line-awesome/css/line-awesome.min.css";
+import "font-awesome/css/font-awesome.min.css";
 import "@sass/app.scss";
 import Datepicker from "@components/Datepicker.vue";
 
@@ -16,7 +16,7 @@ export default {
 	},
 	data() {
 		return {
-			date: ""
+			date: "09/10/2020"
 		};
 	}
 };

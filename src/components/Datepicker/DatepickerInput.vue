@@ -7,6 +7,8 @@
 			type="text"
 			:placeholder="placeholder"
 			:value="date"
+			:readonly="trigger"
+			:disabled="trigger"
 			@blur="toggleDatepickerInputFocus(false)"
 			@focus="toggleDatepickerInputFocus(true)"
 			@change="setDateValue"
@@ -15,9 +17,13 @@
 			type="button"
 			name="datepickerButton"
 			class="btn btn-datepicker"
-			@click="toggleDatepickerPopover"
+			@click="toggleDatepickerPopoverOnTrigger"
 		>
-			<i class="la la-calendar" aria-hidden="true"></i>
+			<i
+				class="fa fa-calendar btn-datepicker-icon"
+				name="datepickerButtonIcon"
+				aria-hidden="true"
+			></i>
 		</button>
 	</fieldset>
 </template>
@@ -31,6 +37,12 @@ export default {
 				return "Pick a date";
 			}
 		},
+		trigger: {
+			type: Boolean,
+			default() {
+				return false;
+			}
+		},
 		date: {
 			type: String,
 			default() {
@@ -41,16 +53,25 @@ export default {
 	data() {
 		return {};
 	},
+	mounted() {
+		console.log(moment().locale);
+	},
 	methods: {
 		toggleDatepickerInputFocus(focusValue) {
-			this.$emit("focus", focusValue);
+			if (!this.trigger) {
+				this.$emit("focus", focusValue);
+			}
 		},
-		toggleDatepickerPopover() {
-			this.$emit("click:datepickerinputbutton");
+		toggleDatepickerPopoverOnTrigger() {
+			if (this.trigger) {
+				this.$emit("click:datepickerinputbutton");
+			}
 		},
 		setDateValue: _.debounce(function($event) {
 			let dateValue = $event.target.value;
-			this.$emit("update:datepickerinput", dateValue);
+			if (!this.trigger) {
+				this.$emit("update:datepickerinput", dateValue);
+			}
 		}, 500)
 	}
 };

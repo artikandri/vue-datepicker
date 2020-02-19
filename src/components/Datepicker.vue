@@ -6,27 +6,43 @@
 			:date="datepickerOptions.date"
 			:trigger="trigger"
 			:auto-pick="autoPick"
-			@click:datepickerinputbutton="togglePopover"
+			@click:datepickerinputbutton="togglePopoverOnTrigger"
 			@update:datepickerinput="updateDatepickerInput"
 			@focus="toggleInputFocus"
 		></datepicker-input>
 		<!--end of datepicker input-->
 
 		<!--start of datepicker popover-->
-		<datepicker-popover v-show="isPopoverShown">
-			<datepicker-calendar></datepicker-calendar>
+		<datepicker-popover
+			style="background: red;"
+			@mouseover.native="isPopoverHovered = true"
+			v-click-outside="turnOffPopoverHover"
+			v-show="
+				(isPopoverShown || isPopoverShownOnClick) && !isContainerShown
+			"
+		>
+			<datepicker-calendar
+				@input:date="setDateValue"
+				:datepicker-options="datepickerOptions"
+				:year-first="yearFirst"
+			></datepicker-calendar>
 		</datepicker-popover>
 		<!--end of datepicker popover-->
 
 		<!--start of datepicker container-->
 		<datepicker-container v-show="isContainerShown">
-			<datepicker-calendar></datepicker-calendar>
+			<datepicker-calendar
+				@input:date="setDateValue"
+				:datepicker-options="datepickerOptions"
+				:year-first="yearFirst"
+			></datepicker-calendar>
 		</datepicker-container>
 		<!--end of datepicker container-->
 	</div>
 </template>
 
 <script>
+// import momentMixin from "@mixins/momentMixin.js";
 import DatepickerInput from "@components/Datepicker/DatepickerInput.vue";
 import DatepickerPopover from "@components/Datepicker/DatepickerPopover.vue";
 import DatepickerCalendar from "@components/Datepicker/DatepickerCalendar.vue";
@@ -34,6 +50,7 @@ import DatepickerContainer from "@components/Datepicker/DatepickerContainer.vue"
 
 export default {
 	name: "Datepicker",
+	// mixins: [momentMixin],
 	props: {
 		value: {
 			type: String,
@@ -66,7 +83,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return false;
+				return true;
 			}
 		},
 		trigger: {
@@ -75,7 +92,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return false;
+				return true;
 			}
 		},
 		inline: {
@@ -85,12 +102,12 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return false;
+				return true;
 			}
 		},
 		autoShow: {
 			/*
-				Shows the calendar popup on first load. 
+				Shows the calendar popup on first load.
 				Doesnt have any effect in inline view.
 			*/
 			type: Boolean,
@@ -100,7 +117,7 @@ export default {
 		},
 		autoHide: {
 			/*
-				Automatically hides the calendar popup after selecting the date. 
+				Automatically hides the calendar popup after selecting the date.
 				Doesnt have any effect in inline view.
 			*/
 			type: Boolean,
@@ -136,10 +153,13 @@ export default {
 	data() {
 		return {
 			isFocused: false,
-			isPopoverShownOnClick: false
+			isPopoverShownOnClick: false,
+			isPopoverHovered: false
 		};
 	},
-	mounted() {},
+	mounted() {
+		this.prepareDatepicker();
+	},
 	computed: {
 		/*
 			Shows/hides the container based on the inline and the container value.
@@ -156,11 +176,9 @@ export default {
 		isPopoverShown() {
 			let isPopoverShown = this.inline ? false : this.isFocused;
 			isPopoverShown = this.autoShow ? true : isPopoverShown;
-			isPopoverShown =
-				(this.isFocused ? true : isPopoverShown) ||
-				this.isPopoverShownOnClick;
+			isPopoverShown = this.isFocused ? true : isPopoverShown;
 
-			return isPopoverShown;
+			return isPopoverShown || this.isPopoverHovered;
 		},
 		/*
 			Returns datepicker options based on the .
@@ -174,9 +192,9 @@ export default {
 			let defaultOptions = {
 				date: dateValue,
 				format: "MM/DD/YYYY",
-				startDate: null,
-				endDate: null,
-				language: "en",
+				startDate: "10/01/2019",
+				endDate: "03/30/2020",
+				language: "jp",
 				startView: 0,
 				weekStart: 0,
 				offset: 0,
@@ -187,11 +205,40 @@ export default {
 		}
 	},
 	methods: {
+		prepareDatepicker() {
+			this.setDatepickerLocale();
+		},
+		setDatepickerLocale() {
+			let localeString = this.datepickerOptions.language || "en";
+			moment.locale(localeString);
+		},
+		setDateValue(date) {
+			this.$emit("input", date);
+		},
 		updateDatepickerInput(date) {
 			this.$emit("input", date);
 		},
-		togglePopover() {
-			this.isPopoverShownOnClick = !this.isPopoverShownOnClick;
+		turnOffPopoverHover($event) {
+			this.isPopoverHovered = false;
+			this.$nextTick(() => {
+				if (this.trigger && $event && $event.target) {
+					const targetClass = String($event.target.className);
+					const prevent = ["btn-datepicker", "btn-datepicker-icon"];
+					let hasSlices = _.intersection(
+						prevent,
+						targetClass.split(" ")
+					).length;
+					if (!hasSlices) {
+						this.isPopoverShownOnClick = !this
+							.isPopoverShownOnClick;
+					}
+				}
+			});
+		},
+		togglePopoverOnTrigger() {
+			if (this.trigger) {
+				this.isPopoverShownOnClick = !this.isPopoverShownOnClick;
+			}
 		},
 		toggleInputFocus(focusValue) {
 			this.isFocused = focusValue;
