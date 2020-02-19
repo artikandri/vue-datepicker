@@ -13,6 +13,7 @@
 		<month-view
 			v-show="step == 1"
 			:datepicker-options="datepickerOptions"
+			@input:date="setDateValue"
 			@click:monthButton="setStep"
 		/>
 		<year-view v-show="step == 0" @click:yearButton="setStep" />

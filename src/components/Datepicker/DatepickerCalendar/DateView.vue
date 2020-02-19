@@ -140,6 +140,7 @@ export default {
 			const lastDayDate = moment(this.navDate).endOf("month");
 			const lastEmptyCells = 6 - lastDayDate.weekday();
 			const daysInMonth = this.navDate.daysInMonth();
+
 			const arrayLength =
 				initialEmptyCells + lastEmptyCells + daysInMonth;
 

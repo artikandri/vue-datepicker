@@ -99,7 +99,19 @@ export default {
 			);
 		},
 		selectMonth(month) {
+			let { format } = this.datepickerOptions;
+			let selectionFormat = "DD MMM YYYY";
 			if (month.available) {
+				let formattedValue = moment(this.value, format).format(
+					selectionFormat
+				);
+				let split = formattedValue.split(" ");
+				split[1] = month.value;
+				let date = moment(split.join(" "), selectionFormat).format(
+					format
+				);
+
+				this.$emit("input:date", date);
 				this.$emit("click:monthButton", 2);
 			}
 		},
