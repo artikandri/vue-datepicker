@@ -244,8 +244,8 @@ export default {
 							targetClass.split(" ")
 						).length;
 						if (!hasSlices) {
-							this.isPopoverShownOnClick = !this
-								.isPopoverShownOnClick;
+							this.isPopoverShownOnClick = false;
+							this.isFocused = false;
 						}
 					} else {
 						let prevent = [

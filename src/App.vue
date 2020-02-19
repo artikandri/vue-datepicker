@@ -4,6 +4,10 @@
 			v-model="date"
 			:auto-show="autoShow"
 			:auto-hide="autoHide"
+			:trigger="trigger"
+			:inline="inline"
+			:container="container"
+			:options="options"
 		></datepicker>
 	</div>
 </template>
@@ -20,8 +24,12 @@ export default {
 	},
 	data() {
 		return {
+			options: {},
+			container: false,
+			inline: false,
+			trigger: true,
 			autoShow: true,
-			autoHide: true,
+			autoHide: false,
 			date: "09/10/2020"
 		};
 	}
