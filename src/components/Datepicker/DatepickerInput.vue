@@ -1,8 +1,5 @@
 <template>
-	<fieldset class="datepicker-form">
-		<label>
-			Datepicker
-		</label>
+	<div class="datepicker-form">
 		<input
 			type="text"
 			class="datepicker-input"
@@ -27,7 +24,7 @@
 				aria-hidden="true"
 			></i>
 		</button>
-	</fieldset>
+	</div>
 </template>
 <script>
 export default {

@@ -17,9 +17,7 @@
 			style="background: red;"
 			@mouseover.native="isPopoverHovered = true"
 			v-click-outside.native="turnOffPopoverHover"
-			v-show="
-				(isPopoverShown || isPopoverShownOnClick) && !isContainerShown
-			"
+			v-show="showPopover"
 		>
 			<datepicker-calendar
 				@click:date-item="hidePopover"
@@ -165,6 +163,12 @@ export default {
 		this.prepareDatepicker();
 	},
 	computed: {
+		showPopover() {
+			return (
+				(this.isPopoverShown || this.isPopoverShownOnClick) &&
+				!this.isContainerShown
+			);
+		},
 		/*
 			Shows/hides the container based on the inline and the container value.
 			Returns Boolean.
@@ -199,7 +203,7 @@ export default {
 				startDate: "10/01/2019",
 				endDate: "03/30/2020",
 				language: "jp",
-				startView: 0,
+				startView: 2,
 				weekStart: 0,
 				offset: 0,
 				zIndex: 1000
