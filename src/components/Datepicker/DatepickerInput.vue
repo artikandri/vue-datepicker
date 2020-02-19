@@ -16,6 +16,7 @@
 		<button
 			type="button"
 			name="datepickerButton"
+			:disabled="!trigger"
 			class="btn btn-datepicker"
 			@click="toggleDatepickerPopoverOnTrigger"
 		>
@@ -53,9 +54,7 @@ export default {
 	data() {
 		return {};
 	},
-	mounted() {
-		console.log(moment().locale);
-	},
+	mounted() {},
 	methods: {
 		toggleDatepickerInputFocus(focusValue) {
 			if (!this.trigger) {

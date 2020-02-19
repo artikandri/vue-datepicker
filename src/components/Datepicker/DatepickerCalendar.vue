@@ -79,6 +79,12 @@ export default {
 			default() {
 				return false;
 			}
+		},
+		autoHide: {
+			type: Boolean,
+			default() {
+				return false;
+			}
 		}
 	},
 	data() {
@@ -121,19 +127,18 @@ export default {
 					obj.available = false;
 				} else {
 					obj.value = i - initialEmptyCells + 1;
-					obj.available = this.isAvailable(i - initialEmptyCells + 1);
+					obj.available = true;
 				}
 				this.gridArr.push(obj);
 			}
 		},
-		isAvailable() {
-			// let dateToCheck = this.dateFromNum(num, this.navDate);
-			return true;
-			// if (dateToCheck.isBefore(moment(), "day")) {
-			// 	return false;
-			// } else {
-			// 	return true;
-			// }
+		isAvailable(num) {
+			let dateToCheck = this.dateFromNum(num, this.navDate);
+			if (dateToCheck.isBefore(moment(), "day")) {
+				return false;
+			} else {
+				return true;
+			}
 		},
 		dateFromNum(num, referenceDate) {
 			let returnDate = moment(referenceDate);
@@ -193,6 +198,9 @@ export default {
 					this.datepickerOptions.format
 				);
 				this.$emit("input:date", formattedDate);
+				if (this.autoHide) {
+					this.$emit("click:date-item");
+				}
 			}
 		},
 		setWeekHeader() {

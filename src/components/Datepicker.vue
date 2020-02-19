@@ -22,9 +22,11 @@
 			"
 		>
 			<datepicker-calendar
+				@click:date-item="hidePopover"
 				@input:date="setDateValue"
 				:datepicker-options="datepickerOptions"
 				:year-first="yearFirst"
+				:auto-hide="autoHide"
 			></datepicker-calendar>
 		</datepicker-popover>
 		<!--end of datepicker popover-->
@@ -32,9 +34,11 @@
 		<!--start of datepicker container-->
 		<datepicker-container v-show="isContainerShown">
 			<datepicker-calendar
+				@click:date-item="hidePopover"
 				@input:date="setDateValue"
 				:datepicker-options="datepickerOptions"
 				:year-first="yearFirst"
+				:auto-hide="autoHide"
 			></datepicker-calendar>
 		</datepicker-container>
 		<!--end of datepicker container-->
@@ -83,7 +87,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return true;
+				return false;
 			}
 		},
 		trigger: {
@@ -92,7 +96,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return true;
+				return false;
 			}
 		},
 		inline: {
@@ -102,7 +106,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return true;
+				return false;
 			}
 		},
 		autoShow: {
@@ -122,7 +126,7 @@ export default {
 			*/
 			type: Boolean,
 			default() {
-				return false;
+				return true;
 			}
 		},
 		autoPick: {
@@ -217,6 +221,12 @@ export default {
 		},
 		updateDatepickerInput(date) {
 			this.$emit("input", date);
+		},
+		hidePopover() {
+			this.isFocused = false;
+			this.isPopoverHovered = this.autoHide
+				? false
+				: this.isPopoverHovered;
 		},
 		turnOffPopoverHover($event) {
 			this.isPopoverHovered = false;
