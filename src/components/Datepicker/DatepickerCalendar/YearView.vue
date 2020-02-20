@@ -169,17 +169,12 @@ export default {
 			clonedDate.add(num, "year");
 
 			let canChange = false;
-
 			let { startDate, endDate, format } = this.datepickerOptions;
-			let formattedStartDate = startDate
-				? moment(startDate, format).format("YYYY")
-				: "";
-			let formattedEndDate = endDate
-				? moment(endDate, format).format("YYYY")
-				: "";
-			// let formattedClonedDate = clonedDate.format("YYYY");
 
-			if (formattedStartDate || formattedEndDate) {
+			if (startDate || endDate) {
+				startDate = startDate || this.value;
+				endDate = endDate || this.value;
+
 				canChange = moment(this.value, format).isBetween(
 					startDate,
 					endDate
