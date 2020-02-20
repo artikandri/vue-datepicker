@@ -98,12 +98,8 @@ export default {
 				: moment();
 		},
 		setYears() {
-			const currentYear = this.value
-				? moment(this.value, this.datepickerOptions.format).add(
-						-5,
-						"year"
-				  )
-				: moment().add(-5, "year");
+			const navDate = _.cloneDeep(this.navDate);
+			const currentYear = navDate.add(-5, "year");
 
 			// generate array
 			let result = [];
@@ -171,14 +167,26 @@ export default {
 			let canChange = false;
 			let { startDate, endDate, format } = this.datepickerOptions;
 
-			if (startDate || endDate) {
-				startDate = startDate || this.value;
-				endDate = endDate || this.value;
+			// set year to check
+			let startYear = startDate
+				? parseInt(moment(startDate, format).format("YYYY"))
+				: 0;
+			let endYear = endDate
+				? parseInt(moment(endDate, format).format("YYYY"))
+				: 0;
+			let clonedYear = endDate ? parseInt(clonedDate.format("YYYY")) : 0;
 
-				canChange = moment(this.value, format).isBetween(
-					startDate,
-					endDate
-				);
+			if (startYear || endYear) {
+				if (startYear && endYear) {
+					canChange =
+						clonedYear >= startYear && clonedYear <= endYear;
+				} else if (startYear && !endYear) {
+					canChange = clonedYear >= startYear;
+				} else if (!startYear && endYear) {
+					canChange = clonedYear <= endYear;
+				} else {
+					// do something
+				}
 			} else {
 				canChange = true;
 			}
@@ -186,11 +194,12 @@ export default {
 			return canChange;
 		},
 		changeNavYear(num) {
-			if (this.canChangeNavYear(this.navDate, num, "year")) {
+			if (this.canChangeNavYear(this.navDate, num)) {
 				this.navDate.add(num, "year");
 			}
 
 			this.$nextTick(() => {
+				this.setYears();
 				this.$forceUpdate();
 			});
 		}
@@ -201,6 +210,7 @@ export default {
 				this.setNavDateValue();
 				this.$nextTick(() => {
 					this.setYears();
+					this.$forceUpdate();
 				});
 			}
 		}

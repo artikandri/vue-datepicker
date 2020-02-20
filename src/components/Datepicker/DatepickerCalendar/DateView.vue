@@ -191,9 +191,15 @@ export default {
 				: "";
 			let formattedClonedDate = clonedDate.format("x");
 
+			formattedStartDate = parseInt(formattedStartDate);
+			formattedEndDate = parseInt(formattedEndDate);
+			formattedClonedDate = parseInt(formattedClonedDate);
+
 			if (formattedStartDate || formattedEndDate) {
 				if (formattedStartDate && formattedEndDate) {
-					canChange = clonedDate.isBetween(startDate, endDate);
+					canChange =
+						formattedClonedDate >= formattedStartDate &&
+						formattedClonedDate <= formattedEndDate;
 				} else if (formattedStartDate && !formattedEndDate) {
 					canChange = formattedClonedDate >= formattedStartDate;
 				} else if (!formattedStartDate && formattedEndDate) {
