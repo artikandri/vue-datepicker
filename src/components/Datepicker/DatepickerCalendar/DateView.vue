@@ -62,7 +62,7 @@
 							</button>
 							<button
 								v-if="date.value === 0"
-								class="date-item"
+								class="date-item btn btn-date"
 							></button>
 						</li>
 					</ul>

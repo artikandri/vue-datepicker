@@ -1,10 +1,5 @@
 <template>
 	<div class="">
-		month view
-		<button name="monthButton" @click="$emit('click:monthButton', 0)">
-			2010
-		</button>
-
 		<div class="datepicker-calendar calendar--date-view">
 			<div class="calendar">
 				<div class="calendar-nav">
@@ -43,7 +38,7 @@
 								v-for="(month, idx) in monthsArr"
 							>
 								<button
-									class="date-item"
+									class="btn btn-month month-item"
 									:disabled="!month.available"
 								>
 									{{ month.value }}
@@ -84,9 +79,15 @@ export default {
 		this.setDatepickerLocale();
 	},
 	mounted() {
+		this.setNavDateValue();
 		this.setMonths();
 	},
 	methods: {
+		setNavDateValue() {
+			this.navDate = this.value
+				? moment(this.value, this.datepickerOptions.format)
+				: moment();
+		},
 		setMonths() {
 			const monthsArr = Array.from(Array(12).keys());
 			monthsArr.forEach(month =>
@@ -101,12 +102,14 @@ export default {
 		selectMonth(month) {
 			let { format } = this.datepickerOptions;
 			let selectionFormat = "DD MMM YYYY";
+			let year = this.navDate.format("YYYY");
 			if (month.available) {
 				let formattedValue = moment(this.value, format).format(
 					selectionFormat
 				);
 				let split = formattedValue.split(" ");
 				split[1] = month.value;
+				split[2] = year;
 				let date = moment(split.join(" "), selectionFormat).format(
 					format
 				);
@@ -159,6 +162,13 @@ export default {
 			this.$nextTick(() => {
 				this.$forceUpdate();
 			});
+		}
+	},
+	watch: {
+		value(val) {
+			if (val) {
+				this.setNavDateValue();
+			}
 		}
 	}
 };

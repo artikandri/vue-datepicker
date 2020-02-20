@@ -27,8 +27,8 @@ export default {
 			options: {
 				language: "ja",
 				format: "DD/MM/YYYY",
-				startDate: "09/12/2020",
-				endDate: "09/03/2020"
+				startDate: "09/12/2000",
+				endDate: "09/03/2026"
 			},
 			container: false,
 			inline: false,

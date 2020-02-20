@@ -241,8 +241,8 @@ export default {
 			};
 
 			let options = this.options;
-			options.startDate = isStartDateValid ? startDate : "";
-			options.endDate = isEndDateValid ? endDate : "";
+			// options.startDate = isStartDateValid ? startDate : "";
+			// options.endDate = isEndDateValid ? endDate : "";
 
 			let finalOptions = { ...defaultOptions, ...options };
 			return finalOptions;
