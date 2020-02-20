@@ -6,6 +6,7 @@
 			:date="datepickerOptions.date"
 			:trigger="trigger"
 			:auto-pick="autoPick"
+			:datepicker-options="datepickerOptions"
 			@click:datepickerinputbutton="togglePopoverOnTrigger"
 			@update:datepickerinput="updateDatepickerInput"
 			@focus="toggleInputFocus"
@@ -66,7 +67,7 @@ export default {
 			/*
 				Default options: {
 					date: null,
-					format: "MM/DD/YYYY",
+					format: "DD/MM/YYYY",
 					startDate: null,
 					endDate: null,
 					language: "en",
@@ -162,7 +163,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.prepareDatepicker();
+		this.setDatepickerLocale();
 	},
 	computed: {
 		showPopover() {
@@ -195,7 +196,7 @@ export default {
 		*/
 		datepickerOptions() {
 			let { startDate, endDate, format } = this.options;
-			let defaultDateFormat = format || "MM/DD/YYYY";
+			let defaultDateFormat = format || "DD/MM/YYYY";
 
 			let todayDate = moment().format(defaultDateFormat);
 			let autoPickDate = this.autoPick ? todayDate : null;
@@ -230,7 +231,7 @@ export default {
 
 			let defaultOptions = {
 				date: dateValue,
-				format: "MM/DD/YYYY",
+				format: "DD/MM/YYYY",
 				startDate: "",
 				endDate: "",
 				language: "en",
@@ -245,16 +246,15 @@ export default {
 			// options.endDate = isEndDateValid ? endDate : "";
 
 			let finalOptions = { ...defaultOptions, ...options };
+
 			return finalOptions;
 		}
 	},
 	methods: {
-		prepareDatepicker() {
-			this.setDatepickerLocale();
-		},
-		setDatepickerLocale() {
-			let localeString = this.datepickerOptions.language || "en";
-			moment.locale(localeString);
+		setDatepickerLocale(options = null) {
+			let { language, format } = options || this.datepickerOptions;
+			moment.locale(language);
+			moment.defaultFormat = format;
 		},
 		setDateValue(date) {
 			this.$emit("input", date);

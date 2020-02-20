@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
 import "moment/locale/id";
+import "moment/locale/ja";
 
 Vue.config.productionTip = false;
 

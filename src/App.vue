@@ -25,17 +25,16 @@ export default {
 	data() {
 		return {
 			options: {
-				language: "ja",
-				format: "DD/MM/YYYY",
-				startDate: "09/12/2000",
-				endDate: "09/03/2026"
+				format: "DD-MM-YYYY",
+				startDate: "09-07-2000",
+				endDate: "17-12-2026"
 			},
 			container: false,
 			inline: false,
 			trigger: true,
 			autoShow: true,
 			autoHide: false,
-			date: "09/02/2020"
+			date: "10-02-2020"
 		};
 	}
 };
