@@ -50,7 +50,6 @@
 </template>
 
 <script>
-// import momentMixin from "@mixins/momentMixin.js";
 import DatepickerInput from "@components/Datepicker/DatepickerInput.vue";
 import DatepickerPopover from "@components/Datepicker/DatepickerPopover.vue";
 import DatepickerCalendar from "@components/Datepicker/DatepickerCalendar.vue";
@@ -58,7 +57,6 @@ import DatepickerContainer from "@components/Datepicker/DatepickerContainer.vue"
 
 export default {
 	name: "Datepicker",
-	// mixins: [momentMixin],
 	props: {
 		value: {
 			type: String,
