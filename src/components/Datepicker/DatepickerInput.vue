@@ -24,6 +24,9 @@
 				aria-hidden="true"
 			></i>
 		</button>
+		<small v-show="showWarning" class="text-danger">
+			{{ warningText }}
+		</small>
 	</div>
 </template>
 <script>
@@ -56,7 +59,10 @@ export default {
 		}
 	},
 	data() {
-		return {};
+		return {
+			warningText: "",
+			showWarning: false
+		};
 	},
 	mounted() {},
 	methods: {
@@ -74,12 +80,57 @@ export default {
 				this.$emit("click:datepickerInputButton");
 			}
 		},
+		isWithinRange(dateString) {
+			let { startDate, endDate, format } = this.datepickerOptions;
+
+			let startTimestamp = startDate
+				? parseInt(moment(startDate, format).format("x"))
+				: 0;
+			let endTimestamp = endDate
+				? parseInt(moment(endDate, format).format("x"))
+				: 0;
+			let dateTimestamp = dateString
+				? parseInt(moment(dateString, format).format("x"))
+				: 0;
+
+			let isWithinRange = true;
+			if (startTimestamp || endTimestamp) {
+				if (startTimestamp && endTimestamp) {
+					isWithinRange =
+						dateTimestamp >= startTimestamp &&
+						dateTimestamp <= endTimestamp;
+				} else if (startTimestamp && !endTimestamp) {
+					isWithinRange = dateTimestamp >= startTimestamp;
+				} else if (!startTimestamp && endTimestamp) {
+					isWithinRange = dateTimestamp <= endTimestamp;
+				} else {
+					isWithinRange = false;
+				}
+			} else {
+				isWithinRange = true;
+			}
+
+			return isWithinRange;
+		},
 		setDateValue: _.debounce(function($event) {
 			let dateValue = $event.target.value;
+			let { startDate, endDate, format } = this.datepickerOptions;
 			if (!this.trigger) {
 				if (this.checkInputValidity(dateValue)) {
-					this.$emit("change:setStep", 2);
-					this.$emit("update:datepickerInput", dateValue);
+					this.showWarning = false;
+
+					if (this.isWithinRange(dateValue)) {
+						this.showWarning = false;
+
+						this.$emit("change:setStep", 2);
+						this.$emit("update:datepickerInput", dateValue);
+					} else {
+						this.showWarning = true;
+						this.warningText = `Please enter the date between ${startDate} - ${endDate}`;
+					}
+				} else {
+					this.showWarning = true;
+					this.warningText = `Please enter the date in format: ${format}`;
 				}
 			}
 		}, 500)
