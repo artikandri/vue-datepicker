@@ -107,9 +107,9 @@ export default {
 	},
 	created() {
 		this.setDatepickerLocale();
-		this.setNavDateValue();
 	},
 	mounted() {
+		this.setNavDateValue();
 		this.setWeekHeader();
 		this.setDates();
 	},
@@ -164,7 +164,10 @@ export default {
 			});
 		},
 		checkDateAvailability(date) {
+			date = String(date).length == 1 ? `0${date}` : date;
+
 			const navDate = _.cloneDeep(this.navDate);
+			// navDate.set({ year: 2000 });
 			let { startDate, endDate, format } = this.datepickerOptions;
 
 			let startTimestamp = startDate
@@ -181,18 +184,28 @@ export default {
 							.format("x")
 				  )
 				: 0;
+
 			let currentViewedMonthYear = navDate.format("MM-YYYY");
 			let newDate = `${date}-${currentViewedMonthYear}`;
-			let newDateTimestamp = moment(newDate, "DD-MM-YYYY").format("x");
+			let newDateTimestamp = parseInt(
+				moment(newDate, "DD-MM-YYYY").format("x")
+			);
 
 			let isAvailable = true;
 			if (startTimestamp || endTimestamp) {
-				isAvailable =
-					newDateTimestamp >= startTimestamp &&
-					newDateTimestamp <= endTimestamp;
+				if (startTimestamp && endTimestamp) {
+					isAvailable =
+						newDateTimestamp >= startTimestamp &&
+						newDateTimestamp <= endTimestamp;
+				} else if (startTimestamp && !endTimestamp) {
+					isAvailable = newDateTimestamp >= startTimestamp;
+				} else if (!startTimestamp && endTimestamp) {
+					isAvailable = newDateTimestamp <= endTimestamp;
+				}
 			} else {
 				isAvailable = true;
 			}
+
 			return isAvailable;
 		},
 		isAvailable(num) {
@@ -278,6 +291,9 @@ export default {
 		value(val) {
 			if (val) {
 				this.setNavDateValue();
+				this.$nextTick(() => {
+					this.setDates();
+				});
 			}
 		}
 	}
