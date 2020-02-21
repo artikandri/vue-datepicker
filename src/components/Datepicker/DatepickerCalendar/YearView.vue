@@ -133,7 +133,7 @@ export default {
 				);
 
 				this.$emit("input:date", date);
-				this.$emit("click:yearButton", 2);
+				this.$emit("click:yearButton", 1);
 			}
 		},
 		checkYearAvailability(year) {

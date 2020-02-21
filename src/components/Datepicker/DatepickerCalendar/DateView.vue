@@ -14,11 +14,8 @@
 						<i class="fa fa-chevron-left"></i>
 					</button>
 				</div>
-				<button name="dateButton" @click="$emit('click:dateButton', 1)">
-					{{ navDate.format("MMMM") }}
-				</button>
 				<button name="dateButton" @click="$emit('click:dateButton', 0)">
-					{{ navDate.format("YYYY") }}
+					{{ navDate.format(monthFormat) }}
 				</button>
 				<div
 					class="calendar-nav-next-month"

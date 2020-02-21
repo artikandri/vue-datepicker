@@ -195,13 +195,14 @@ export default {
 			Returns Object.
 		*/
 		datepickerOptions() {
-			let { startDate, endDate, format } = this.options;
-			let defaultDateFormat = format || "DD/MM/YYYY";
+			const { startDate, endDate, format } = this.options;
+			const defaultDateFormat = format || "DD/MM/YYYY";
 
-			let todayDate = moment().format(defaultDateFormat);
-			let autoPickDate = this.autoPick ? todayDate : null;
-			let dateValue = this.value || autoPickDate || null;
+			const todayDate = moment().format(defaultDateFormat);
+			const autoPickDate = this.autoPick ? todayDate : null;
+			const dateValue = this.value || autoPickDate || null;
 
+			// check startDate and endDate validity
 			let isStartDateValid = startDate
 				? moment(startDate, format).isSameOrBefore(
 						moment(this.value, format)
@@ -229,7 +230,8 @@ export default {
 					: isStartDateValid;
 			}
 
-			let defaultOptions = {
+			// default options
+			const defaultOptions = {
 				date: dateValue,
 				format: "DD/MM/YYYY",
 				startDate: "",
@@ -242,10 +244,12 @@ export default {
 			};
 
 			let options = this.options;
+
+			// reset startDate and EndDate when not valid
 			// options.startDate = isStartDateValid ? startDate : "";
 			// options.endDate = isEndDateValid ? endDate : "";
 
-			let finalOptions = { ...defaultOptions, ...options };
+			const finalOptions = { ...defaultOptions, ...options };
 
 			return finalOptions;
 		}
@@ -273,7 +277,13 @@ export default {
 			this.$nextTick(() => {
 				if ($event && $event.target) {
 					const targetClass = String($event.target.className);
-					let prevent = ["btn-datepicker", "btn-datepicker-icon"];
+					let prevent = [
+						"btn-datepicker",
+						"btn-datepicker-icon",
+						"btn-year",
+						"btn-month",
+						"btn-date"
+					];
 
 					if (this.trigger) {
 						let hasSlices = _.intersection(

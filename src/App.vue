@@ -25,6 +25,7 @@ export default {
 	data() {
 		return {
 			options: {
+				language: "ja",
 				format: "DD-MM-YYYY",
 				startDate: "09-07-2000",
 				endDate: "17-01-2026"
