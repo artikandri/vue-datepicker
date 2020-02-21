@@ -90,14 +90,55 @@ export default {
 		},
 		setMonths() {
 			const monthsArr = Array.from(Array(12).keys());
-			monthsArr.forEach(month =>
-				this.monthsArr.push({
-					value: moment()
-						.month(month)
-						.format("MMM"),
-					available: true
-				})
-			);
+			let result = [];
+			monthsArr.forEach(month => {
+				let momentMonth = moment().month(month);
+				result.push({
+					value: momentMonth.format("MMM"),
+					available: this.checkMonthAvailability(
+						momentMonth.format("MM")
+					)
+				});
+			});
+
+			this.monthsArr = [];
+			this.$nextTick(() => {
+				this.monthsArr = _.cloneDeep(result);
+			});
+		},
+		checkMonthAvailability(month) {
+			const navDate = _.cloneDeep(this.navDate);
+			let { startDate, endDate, format } = this.datepickerOptions;
+
+			let startTimestamp = startDate
+				? parseInt(
+						moment(startDate, format)
+							.add(-1, "day")
+							.format("x")
+				  )
+				: 0;
+			let endTimestamp = endDate
+				? parseInt(
+						moment(endDate, format)
+							.add(1, "day")
+							.format("x")
+				  )
+				: 0;
+			let currentViewedMonthYear = navDate.format("DD-MM-YYYY");
+			currentViewedMonthYear = currentViewedMonthYear.split("-");
+			let newDate = `${currentViewedMonthYear[0]}-${month}-${currentViewedMonthYear[2]}`;
+
+			let newDateTimestamp = moment(newDate, "DD-MM-YYYY").format("x");
+
+			let isAvailable = true;
+			if (startTimestamp || endTimestamp) {
+				isAvailable =
+					newDateTimestamp >= startTimestamp &&
+					newDateTimestamp <= endTimestamp;
+			} else {
+				isAvailable = true;
+			}
+			return isAvailable;
 		},
 		selectMonth(month) {
 			let { format } = this.datepickerOptions;
@@ -160,6 +201,7 @@ export default {
 				this.navDate.add(num, "year");
 			}
 			this.$nextTick(() => {
+				this.setMonths();
 				this.$forceUpdate();
 			});
 		}
@@ -168,6 +210,9 @@ export default {
 		value(val) {
 			if (val) {
 				this.setNavDateValue();
+				this.$nextTick(() => {
+					this.setMonths();
+				});
 			}
 		}
 	}

@@ -133,6 +133,7 @@ export default {
 			moment.locale(localeString);
 		},
 		setDates() {
+			const base = this;
 			this.gridArr = [];
 
 			const firstDayDate = moment(this.navDate).startOf("month");
@@ -153,16 +154,49 @@ export default {
 					obj.value = 0;
 					obj.available = false;
 				} else {
-					obj.value = i - initialEmptyCells + 1;
-					obj.available = true;
+					let date = i - initialEmptyCells + 1;
+					obj.value = date;
+					obj.available = base.checkDateAvailability(date);
 				}
 
-				this.gridArr.push(obj);
+				base.gridArr.push(obj);
 			}
 
 			this.$nextTick(() => {
 				this.$forceUpdate();
 			});
+		},
+		checkDateAvailability(date) {
+			const navDate = _.cloneDeep(this.navDate);
+			let { startDate, endDate, format } = this.datepickerOptions;
+
+			let startTimestamp = startDate
+				? parseInt(
+						moment(startDate, format)
+							.add(-1, "day")
+							.format("x")
+				  )
+				: 0;
+			let endTimestamp = endDate
+				? parseInt(
+						moment(endDate, format)
+							.add(1, "day")
+							.format("x")
+				  )
+				: 0;
+			let currentViewedMonthYear = navDate.format("MM-YYYY");
+			let newDate = `${date}-${currentViewedMonthYear}`;
+			let newDateTimestamp = moment(newDate, "DD-MM-YYYY").format("x");
+
+			let isAvailable = true;
+			if (startTimestamp || endTimestamp) {
+				isAvailable =
+					newDateTimestamp >= startTimestamp &&
+					newDateTimestamp <= endTimestamp;
+			} else {
+				isAvailable = true;
+			}
+			return isAvailable;
 		},
 		isAvailable(num) {
 			let dateToCheck = this.dateFromNum(num, this.navDate);

@@ -27,7 +27,7 @@ export default {
 			options: {
 				format: "DD-MM-YYYY",
 				startDate: "09-07-2000",
-				endDate: "17-12-2026"
+				endDate: "17-01-2026"
 			},
 			container: false,
 			inline: false,
