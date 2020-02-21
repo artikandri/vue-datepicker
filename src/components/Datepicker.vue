@@ -7,8 +7,9 @@
 			:trigger="trigger"
 			:auto-pick="autoPick"
 			:datepicker-options="datepickerOptions"
-			@click:datepickerinputbutton="togglePopoverOnTrigger"
-			@update:datepickerinput="updateDatepickerInput"
+			@click:datepickerInputButton="togglePopoverOnTrigger"
+			@change:setStep="setCalendarStep"
+			@update:datepickerInput="updateDatepickerInput"
 			@focus="toggleInputFocus"
 		></datepicker-input>
 		<!--end of datepicker input-->
@@ -21,6 +22,7 @@
 			v-show="showPopover"
 		>
 			<datepicker-calendar
+				ref="datepickerCalendar"
 				:value="value"
 				@click:date-item="hidePopover"
 				@input:date="setDateValue"
@@ -34,6 +36,7 @@
 		<!--start of datepicker container-->
 		<datepicker-container v-show="isContainerShown">
 			<datepicker-calendar
+				ref="datepickerCalendar"
 				:value="value"
 				@click:date-item="hidePopover"
 				@input:date="setDateValue"
@@ -309,6 +312,11 @@ export default {
 					// do something
 				}
 			});
+		},
+		setCalendarStep(step) {
+			if (this.$refs.datepickerCalendar) {
+				this.$refs.datepickerCalendar.setStep(step);
+			}
 		},
 		togglePopoverOnTrigger() {
 			if (this.trigger) {

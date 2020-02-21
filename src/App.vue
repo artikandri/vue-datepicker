@@ -30,9 +30,9 @@ export default {
 				startDate: "09-07-2000",
 				endDate: "17-01-2026"
 			},
-			container: false,
-			inline: false,
-			trigger: true,
+			container: true,
+			inline: true,
+			trigger: false,
 			autoShow: true,
 			autoHide: false,
 			date: "10-02-2020"

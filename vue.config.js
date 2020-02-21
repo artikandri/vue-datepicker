@@ -20,7 +20,8 @@ module.exports = {
         "@assets": path.resolve(__dirname, "src/assets/"),
         "@sass": path.resolve(__dirname, "src/sass/"),
         "@helpers": path.resolve(__dirname, "src/helpers/"),
-        "@mixins": path.resolve(__dirname, "src/mixins/")
+        "@mixins": path.resolve(__dirname, "src/mixins/"),
+        "@directives": path.resolve(__dirname, "src/directives/")
       }
     },
     devServer: {

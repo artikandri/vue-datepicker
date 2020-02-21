@@ -47,6 +47,12 @@ export default {
 			default() {
 				return "";
 			}
+		},
+		datepickerOptions: {
+			type: Object,
+			default() {
+				return {};
+			}
 		}
 	},
 	data() {
@@ -54,6 +60,10 @@ export default {
 	},
 	mounted() {},
 	methods: {
+		checkInputValidity(dateString) {
+			let { format } = this.datepickerOptions;
+			return moment(dateString, format, true).isValid();
+		},
 		toggleDatepickerInputFocus(focusValue) {
 			if (!this.trigger) {
 				this.$emit("focus", focusValue);
@@ -61,13 +71,16 @@ export default {
 		},
 		toggleDatepickerPopoverOnTrigger() {
 			if (this.trigger) {
-				this.$emit("click:datepickerinputbutton");
+				this.$emit("click:datepickerInputButton");
 			}
 		},
 		setDateValue: _.debounce(function($event) {
 			let dateValue = $event.target.value;
 			if (!this.trigger) {
-				this.$emit("update:datepickerinput", dateValue);
+				if (this.checkInputValidity(dateValue)) {
+					this.$emit("change:setStep", 2);
+					this.$emit("update:datepickerInput", dateValue);
+				}
 			}
 		}, 500)
 	}

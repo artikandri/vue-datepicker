@@ -1,0 +1,142 @@
+[
+  {
+    "id": "ar",
+    "text": "ar - IQ"
+  },
+  {
+    "id": "ca",
+    "text": "ca - ES"
+  },
+  {
+    "id": "cs",
+    "text": "cs - CZ"
+  },
+  {
+    "id": "da",
+    "text": "da - DK"
+  },
+  {
+    "id": "de",
+    "text": "de - DE"
+  },
+  {
+    "id": "el",
+    "text": "el - GR"
+  },
+  {
+    "id": "en",
+    "text": "en - GB"
+  },
+  {
+    "id": "en",
+    "text": "en - US"
+  },
+  {
+    "id": "es",
+    "text": "es - ES"
+  },
+  {
+    "id": "fi",
+    "text": "fi - FI"
+  },
+  {
+    "id": "fr",
+    "text": "fr - FR"
+  },
+  {
+    "id": "hu",
+    "text": "hu - HU"
+  },
+  {
+    "id": "is",
+    "text": "is - IS"
+  },
+  {
+    "id": "it",
+    "text": "it - IT"
+  },
+  {
+    "id": "ja",
+    "text": "ja - JP"
+  },
+  {
+    "id": "km",
+    "text": "km - KH"
+  },
+  {
+    "id": "ko",
+    "text": "ko - KR"
+  },
+  {
+    "id": "lt",
+    "text": "lt - LT"
+  },
+  {
+    "id": "lv",
+    "text": "lv - LV"
+  },
+  {
+    "id": "nb",
+    "text": "nb - NO"
+  },
+  {
+    "id": "nl",
+    "text": "nl - NL"
+  },
+  {
+    "id": "oc",
+    "text": "oc - FR"
+  },
+  {
+    "id": "pl",
+    "text": "pl - PL"
+  },
+  {
+    "id": "pt",
+    "text": "pt - BR"
+  },
+  {
+    "id": "ru",
+    "text": "ru - RU"
+  },
+  {
+    "id": "ru",
+    "text": "ru - RU"
+  },
+  {
+    "id": "si",
+    "text": "si - LK"
+  },
+  {
+    "id": "sk",
+    "text": "sk - SK"
+  },
+  {
+    "id": "sv",
+    "text": "sv - SE"
+  },
+  {
+    "id": "ta",
+    "text": "ta - TA"
+  },
+  {
+    "id": "th",
+    "text": "th - TH"
+  },
+  {
+    "id": "tr",
+    "text": "tr - TR"
+  },
+  {
+    "id": "ug",
+    "text": "ug - CN"
+  },
+  {
+    "id": "vi",
+    "text": "vi - VN"
+  },
+  {
+    "id": "zh",
+    "text": "zh - CN"
+  }
+]
