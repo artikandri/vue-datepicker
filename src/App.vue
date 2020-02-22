@@ -42,7 +42,7 @@ export default {
 	mounted() {
 		setTimeout(() => {
 			if (this.$refs.datepicker) {
-				this.$refs.datepicker.update("09-01-1998");
+				this.$refs.datepicker.destroy();
 			}
 		}, 1000);
 	},

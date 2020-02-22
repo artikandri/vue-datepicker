@@ -38,7 +38,7 @@
 		<datepicker-container ref="datepickerContainer" v-if="container">
 			<datepicker-calendar
 				ref="datepickerCalendar"
-				v-show="isContainerShown"
+				v-if="isContainerShown"
 				:value="value"
 				@click:date-item="hidePopover"
 				@input:date="updateDatepickerValue"
@@ -59,7 +59,7 @@ import DatepickerCalendar from "@components/Datepicker/DatepickerCalendar.vue";
 import DatepickerContainer from "@components/Datepicker/DatepickerContainer.vue";
 
 export default {
-	name: "DatepickerWrapper",
+	name: "Datepicker",
 	mixins: [timeMixin],
 	props: {
 		value: {
@@ -191,8 +191,10 @@ export default {
 	data() {
 		return {
 			isFocused: this.autoShow === true,
-			isPopoverInTrigger: false,
-			isPopoverHovered: false
+			isPopoverTriggered: false,
+			isPopoverHovered: false,
+			isContainerDestroyed: false,
+			isPopoverDestroyed: false
 		};
 	},
 	mounted() {
@@ -206,8 +208,9 @@ export default {
 		 */
 		showPopover() {
 			return (
-				(this.isPopoverShown || this.isPopoverInTrigger) &&
-				!this.isContainerShown
+				(this.isPopoverShown || this.isPopoverTriggered) &&
+				!this.isContainerShown &&
+				!this.isPopoverDestroyed
 			);
 		},
 		/**
@@ -216,7 +219,8 @@ export default {
 		 * @return <bool>: true or false
 		 */
 		isContainerShown() {
-			let isContainerShown = this.inline && this.container;
+			let isContainerShown =
+				this.inline && this.container && !this.isContainerDestroyed;
 			return isContainerShown;
 		},
 		/**
@@ -327,7 +331,6 @@ export default {
 		 * @return none
 		 */
 		turnOffPopoverHover($event) {
-			this.isPopoverHovered = false;
 			this.$nextTick(() => {
 				if ($event && $event.target) {
 					const targetClass = String($event.target.className);
@@ -335,32 +338,37 @@ export default {
 						"btn-datepicker",
 						"btn-datepicker-icon",
 						"btn-year",
+						"datepicker-popover",
 						"btn-month",
 						"btn-date"
 					];
 
+					let hasSlices = false;
 					if (this.trigger) {
-						let hasSlices = _.intersection(
-							prevent,
-							targetClass.split(" ")
-						).length;
-						if (!hasSlices) {
-							this.isPopoverInTrigger = false;
-							this.isFocused = false;
-						}
-					} else {
-						prevent = prevent.concat(["datepicker-input"]);
-						let hasSlices = _.intersection(
+						hasSlices = _.intersection(
 							prevent,
 							targetClass.split(" ")
 						).length;
 
 						if (!hasSlices) {
-							this.isFocused = false;
+							this.isPopoverTriggered = false;
 						}
+					} else {
+						prevent = prevent.concat(["datepicker-input"]);
+						hasSlices = _.intersection(
+							prevent,
+							targetClass.split(" ")
+						).length;
+					}
+
+					if (!hasSlices) {
+						this.isFocused = false;
+						this.isPopoverHovered = false;
 					}
 				} else {
-					// do something
+					throw new Error(
+						"(Datepicker.vue) Error in turning off the popover hover state: The $event was not sent"
+					);
 				}
 			});
 		},
@@ -369,11 +377,15 @@ export default {
 		 * @param <number> step: 0, 1, 2
 		 * @return none
 		 */
-		setCalendarStep(step) {
+		setCalendarStep(step = 0) {
 			if (step < 3 && step >= 0) {
 				if (this.$refs.datepickerCalendar) {
 					this.$refs.datepickerCalendar.setStep(step);
 				}
+			} else {
+				throw new Error(
+					"(Datepicker.vue) Error in setting calendar step: The step provided was not valid"
+				);
 			}
 		},
 		/**
@@ -383,7 +395,11 @@ export default {
 		 */
 		togglePopoverOnTrigger() {
 			if (this.trigger) {
-				this.isPopoverInTrigger = !this.isPopoverInTrigger;
+				this.isPopoverTriggered = !this.isPopoverTriggered;
+			} else {
+				throw new Error(
+					"(Datepicker.vue) Error in toggling popover on trigger: The trigger prop is not enabled."
+				);
 			}
 		},
 		/**
@@ -391,8 +407,15 @@ export default {
 		 * @param <bool> focusValue:  true or false
 		 * @return none
 		 */
-		toggleInputFocus(focusValue) {
-			this.isFocused = focusValue;
+		toggleInputFocus(focusValue = true) {
+			if (this.inline && this.container) {
+				this.isContainerDestroyed = false;
+			} else {
+				this.isFocused = focusValue;
+				this.$nextTick(() => {
+					if (this.isFocused) this.isPopoverDestroyed = false;
+				});
+			}
 		},
 		/**
 		 * @desc check the dateString validity by comparing it with the format
@@ -402,6 +425,14 @@ export default {
 		checkInputValidity(dateString = "", format = "") {
 			return moment(dateString, format, true).isValid();
 		},
+		/**
+		 * @desc get currently picked date. defaults to today
+		 * @param <bool> formatted:  true or false
+		 * @return 
+		 		<string> date:  
+			 		UTC format (Sep 22 ..... (Indochina Time))
+			 		or readable format (defaults to DD/MM/YYYY)
+		 */
 		getDate(formatted = false) {
 			let { format } = this.datepickerOptions;
 			let date = "";
@@ -419,10 +450,17 @@ export default {
 			}
 			return date;
 		},
-		getMonthName(short = false) {
+		/**
+		 * @desc get currently picked month name. defaults to this month.
+		 * @param <bool> shorten: true or false
+		 * @return 
+		 		<string> month name: 
+		 			original (ex: February) or shortened (ex: Feb)
+		 */
+		getMonthName(shorten = false) {
 			let { format } = this.datepickerOptions;
 			let month = "";
-			if (short) {
+			if (shorten) {
 				month = this.value
 					? moment(this.value, format).format("MMM")
 					: moment().format("MMM");
@@ -433,7 +471,12 @@ export default {
 			}
 			return month;
 		},
-		getDayName(dayFormat = null) {
+		/**
+		 * @desc get currently picked day name. defaults to today
+		 * @param <string> dayFormat: "short", "min" or null
+		 * @return <string> dayName: "Wednesday", "Wed" or "We"
+		 */
+		getDayName(dayFormat = "") {
 			let { format } = this.datepickerOptions;
 			let dayName = "";
 			if (dayFormat === "short") {
@@ -451,14 +494,43 @@ export default {
 			}
 			return dayName;
 		},
+		/**
+		 * @desc show the popover
+		 * @param none
+		 * @return none
+		 */
 		show() {
 			if (!this.inline) {
 				this.isFocused = true;
+				this.$nextTick(() => {
+					this.isPopoverDestroyed = false;
+				});
+			} else {
+				throw new Error(
+					"(Datepicker.vue) Error in showing the popover: The inline prop is not enabled"
+				);
 			}
 		},
+		/**
+		 * @desc hide the popover
+		 * @param none
+		 * @return none
+		 */
 		hide() {
-			this.isFocused = false;
+			if (!this.inline) {
+				this.isFocused = false;
+			} else {
+				throw new Error(
+					"(Datepicker.vue) Error in showing the popover: Please tick off the inline option first"
+				);
+			}
 		},
+		/**
+		 * @desc when value was not already set, will pick today as current date
+		 		 and emitted the date value to the parent
+		 * @param none
+		 * @return none
+		 */
 		pick() {
 			let { format } = this.datepickerOptions;
 			let dateString = this.value
@@ -468,6 +540,11 @@ export default {
 
 			this.$emit("input", date);
 		},
+		/**
+		 * @desc update currently picked date with new one
+		 * @param <string> date
+		 * @return none
+		 */
 		update(date = "") {
 			let { startDate, endDate, format } = this.datepickerOptions;
 			let previousPickedDate = this.value;
@@ -487,28 +564,43 @@ export default {
 				throw new Error(errorMessage);
 			}
 		},
+		/**
+		 * @desc reset the input value, hides the popover when active, 
+		 		 and reset the calendar back to its original state
+		 * @param none
+		 * @return none
+		 */
 		reset() {
 			this.$emit("input", "");
-			if (this.isContainerShown) {
+			if (this.inline && this.container) {
 				this.$refs.datepickerCalendar.$destroy();
 				this.$nextTick(() => {
-					this.$refs.datepickerCalendar.$mount();
+					if (this.$refs.datepickerCalendar) {
+						this.$refs.datepickerCalendar.$mount();
+					}
 				});
 			} else {
 				this.$refs.datepickerPopover.$destroy();
 				this.$nextTick(() => {
-					this.$refs.datepickerPopover.$mount();
+					if (this.$refs.datepickerPopover) {
+						this.$refs.datepickerPopover.$mount();
+					}
 				});
 			}
 		},
+		/**
+		 * @desc destroy the datepicker calendar and hides the popover if shown
+		 * @param none
+		 * @return none
+		 */
 		destroy() {
-			if (this.isContainerShown) {
-				this.$refs.datepickerCalendar.$destroy();
+			if (this.inline && this.container) {
+				this.isContainerDestroyed = true;
 				this.$nextTick(() => {
 					this.$forceUpdate();
 				});
 			} else {
-				this.$refs.datepickerPopover.$destroy();
+				this.isPopoverDestroyed = true;
 				this.$nextTick(() => {
 					this.$forceUpdate();
 				});
