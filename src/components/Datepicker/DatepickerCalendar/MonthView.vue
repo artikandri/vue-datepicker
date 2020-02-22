@@ -53,8 +53,10 @@
 </template>
 
 <script>
+import timeMixin from "@mixins/timeMixin.js";
 export default {
 	name: "MonthView",
+	mixins: [timeMixin],
 	props: {
 		value: {
 			type: String,
@@ -108,8 +110,9 @@ export default {
 		},
 		checkMonthAvailability(month) {
 			const navDate = _.cloneDeep(this.navDate);
-			let { startDate, endDate, format } = this.datepickerOptions;
 
+			// set dates
+			let { startDate, endDate, format } = this.datepickerOptions;
 			let startTimestamp = startDate
 				? parseInt(
 						moment(startDate, format)
@@ -127,17 +130,13 @@ export default {
 			let currentViewedMonthYear = navDate.format("DD-MM-YYYY");
 			currentViewedMonthYear = currentViewedMonthYear.split("-");
 			let newDate = `${currentViewedMonthYear[0]}-${month}-${currentViewedMonthYear[2]}`;
-
 			let newDateTimestamp = moment(newDate, "DD-MM-YYYY").format("x");
 
-			let isAvailable = true;
-			if (startTimestamp || endTimestamp) {
-				isAvailable =
-					newDateTimestamp >= startTimestamp &&
-					newDateTimestamp <= endTimestamp;
-			} else {
-				isAvailable = true;
-			}
+			let isAvailable = this.timeMixin__compareStartEndDate(
+				startTimestamp,
+				endTimestamp,
+				newDateTimestamp
+			);
 			return isAvailable;
 		},
 		selectMonth(month) {
@@ -167,34 +166,13 @@ export default {
 			const clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "year");
 
-			let canChange = false;
-
 			let { startDate, endDate, format } = this.datepickerOptions;
-			let formattedStartDate = startDate
-				? moment(startDate, format).format("YYYY")
-				: "";
-			let formattedEndDate = endDate
-				? moment(endDate, format).format("YYYY")
-				: "";
-			let formattedClonedDate = clonedDate.format("YYYY");
+			let result = this.timeMixin__canChangeNav(
+				{ startDate, endDate, clonedDate },
+				{ format, newFormat: "x" }
+			);
 
-			if (formattedStartDate || formattedEndDate) {
-				if (formattedStartDate && formattedEndDate) {
-					canChange =
-						formattedClonedDate >= formattedStartDate &&
-						formattedClonedDate <= formattedEndDate;
-				} else if (formattedStartDate && !formattedEndDate) {
-					canChange = formattedClonedDate >= formattedStartDate;
-				} else if (!formattedStartDate && formattedEndDate) {
-					canChange = formattedClonedDate <= formattedEndDate;
-				} else {
-					canChange = false;
-				}
-			} else {
-				canChange = true;
-			}
-
-			return canChange;
+			return result;
 		},
 		changeNavYear(num) {
 			if (this.canChangeNavYear(this.navDate, num, "year")) {

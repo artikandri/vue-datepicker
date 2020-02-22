@@ -1,6 +1,7 @@
 <template>
 	<div id="app">
 		<datepicker
+			ref="datepicker"
 			v-model="date"
 			:auto-show="autoShow"
 			:auto-hide="autoHide"
@@ -25,19 +26,27 @@ export default {
 	data() {
 		return {
 			options: {
-				language: "ja",
+				language: "id",
 				format: "DD-MM-YYYY",
 				startDate: "09-07-2000",
 				endDate: "17-01-2026"
 			},
 			container: true,
-			inline: true,
+			inline: false,
 			trigger: false,
 			autoShow: true,
 			autoHide: false,
-			date: "10-02-2020"
+			date: ""
 		};
-	}
+	},
+	mounted() {
+		setTimeout(() => {
+			if (this.$refs.datepicker) {
+				this.$refs.datepicker.update("09-01-1998");
+			}
+		}, 1000);
+	},
+	methods: {}
 };
 </script>
 

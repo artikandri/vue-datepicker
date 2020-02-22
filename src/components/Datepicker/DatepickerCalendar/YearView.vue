@@ -50,15 +50,27 @@
 </template>
 
 <script>
+import timeMixin from "@mixins/timeMixin";
 export default {
 	name: "YearView",
+	mixins: [timeMixin],
 	props: {
+		/**
+		 * @desc retrieve the datepicker input value entered by user
+		 * @param none
+		 * @return String -
+		 */
 		value: {
 			type: String,
 			default() {
 				return "";
 			}
 		},
+		/**
+		 * @desc retrieve the datepicker options
+		 * @param none
+		 * @return Object
+		 */
 		datepickerOptions: {
 			type: Object,
 			default() {
@@ -80,11 +92,21 @@ export default {
 		this.setYears();
 	},
 	computed: {
+		/**
+		 * @desc retrieve the first year of the range displayed on the calendar
+		 * @param none
+		 * @return String in YYYY format (ex: 2010)
+		 */
 		fromYear() {
 			return moment(this.value, this.datepickerOptions.format)
 				.add(-4, "year")
 				.format("YYYY");
 		},
+		/**
+		 * @desc retrieve the last year of the range displayed on the calendar
+		 * @param none
+		 * @return String in YYYY format (ex: 2010)
+		 */
 		toYear() {
 			return moment(this.value, this.datepickerOptions.format)
 				.add(4, "year")
@@ -92,11 +114,21 @@ export default {
 		}
 	},
 	methods: {
+		/**
+		 * @desc set the nav date value by checking the value first
+		 * @param none
+		 * @return none
+		 */
 		setNavDateValue() {
 			this.navDate = this.value
 				? moment(this.value, this.datepickerOptions.format)
 				: moment();
 		},
+		/**
+		 * @desc set the year array
+		 * @param none
+		 * @return none
+		 */
 		setYears() {
 			const navDate = _.cloneDeep(this.navDate);
 			const currentYear = navDate.add(-5, "year");
@@ -119,6 +151,11 @@ export default {
 				this.yearsArr = _.sortBy(result, "value");
 			});
 		},
+		/**
+		 * @desc check the year availability, then set the value if the year were invalid
+		 * @param none
+		 * @return none
+		 */
 		selectYear(year) {
 			let { format } = this.datepickerOptions;
 			let selectionFormat = "DD MMM YYYY";
@@ -136,17 +173,19 @@ export default {
 				this.$emit("click:yearButton", 1);
 			}
 		},
+		/**
+		 * @desc check the year availability
+		 * @param none
+		 * @return bool: true or false
+		 */
 		checkYearAvailability(year) {
 			let { startDate, endDate, format } = this.datepickerOptions;
-
 			let startYear = startDate
 				? moment(startDate, format).format("YYYY")
 				: 0;
 			startYear = parseInt(startYear);
-
 			let endYear = endDate ? moment(endDate, format).format("YYYY") : 0;
 			endYear = parseInt(endYear);
-
 			let currentYear = endDate
 				? moment(this.value, format).format("YYYY")
 				: 0;
@@ -156,52 +195,46 @@ export default {
 
 			return isNextYear ? year <= endYear : year >= startYear;
 		},
+		/**
+		 * @desc set the moment locale from available options
+		 * @param none
+		 * @return none
+		 */
 		setDatepickerLocale() {
 			let localeString = this.datepickerOptions.language || "en";
 			moment.locale(localeString);
 		},
+		/**
+		 * @desc check the ability to navigate to previous month
+		 * @param none
+		 * @return bool: true or false
+		 */
 		canChangeNavYear(dateToCheck, num) {
 			const clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "year");
 
-			let canChange = false;
 			let { startDate, endDate, format } = this.datepickerOptions;
-
-			// set year to check
-			let startYear = startDate
-				? parseInt(moment(startDate, format).format("YYYY"))
-				: 0;
-			let endYear = endDate
-				? parseInt(moment(endDate, format).format("YYYY"))
-				: 0;
-			let clonedYear = endDate ? parseInt(clonedDate.format("YYYY")) : 0;
-
-			if (startYear || endYear) {
-				if (startYear && endYear) {
-					canChange =
-						clonedYear >= startYear && clonedYear <= endYear;
-				} else if (startYear && !endYear) {
-					canChange = clonedYear >= startYear;
-				} else if (!startYear && endYear) {
-					canChange = clonedYear <= endYear;
-				} else {
-					// do something
-				}
-			} else {
-				canChange = true;
-			}
+			let canChange = this.timeMixin__canChangeNav(
+				{ startDate, endDate, clonedDate },
+				{ format, newFormat: "x" }
+			);
 
 			return canChange;
 		},
+		/**
+		 * @desc set the year if the navDate were available
+		 * @param none
+		 * @return none
+		 */
 		changeNavYear(num) {
 			if (this.canChangeNavYear(this.navDate, num)) {
 				this.navDate.add(num, "year");
-			}
 
-			this.$nextTick(() => {
-				this.setYears();
-				this.$forceUpdate();
-			});
+				this.$nextTick(() => {
+					this.setYears();
+					this.$forceUpdate();
+				});
+			}
 		}
 	},
 	watch: {

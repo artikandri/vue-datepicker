@@ -70,8 +70,11 @@
 </template>
 
 <script>
+import timeMixin from "@mixins/timeMixin.js";
+
 export default {
-	name: "",
+	name: "DateView",
+	mixins: [timeMixin],
 	props: {
 		value: {
 			type: String,
@@ -114,21 +117,42 @@ export default {
 		this.setDates();
 	},
 	computed: {
+		/**
+		 * @desc get the yearFirst option from the parent 
+		 		and return the display format for the month and year
+		 * @param none
+		 * @return String: monthFormat
+		 */
 		monthFormat() {
 			let monthFormat = this.yearFirst ? "YYYY MMMM" : "MMMM YYYY";
 			return monthFormat;
 		}
 	},
 	methods: {
+		/**
+		 * @desc set the navDate value based on the value and format from parent
+		 * @param none
+		 * @return none
+		 */
 		setNavDateValue() {
 			this.navDate = this.value
 				? moment(this.value, this.datepickerOptions.format)
 				: moment();
 		},
+		/**
+		 * @desc set the moment locale based on the option from parent
+		 * @param none
+		 * @return none
+		 */
 		setDatepickerLocale() {
 			let localeString = this.datepickerOptions.language || "en";
 			moment.locale(localeString);
 		},
+		/**
+		 * @desc set the dates array based on the navDate value
+		 * @param none
+		 * @return none
+		 */
 		setDates() {
 			const base = this;
 			this.gridArr = [];
@@ -138,7 +162,6 @@ export default {
 			const lastDayDate = moment(this.navDate).endOf("month");
 			const lastEmptyCells = 6 - lastDayDate.weekday();
 			const daysInMonth = this.navDate.daysInMonth();
-
 			const arrayLength =
 				initialEmptyCells + lastEmptyCells + daysInMonth;
 
@@ -163,26 +186,21 @@ export default {
 				this.$forceUpdate();
 			});
 		},
-		checkDateAvailability(date) {
+		/**
+		 * @desc check the date availability based on the startDate and endDate
+		 * @param <number> date: the date to be calculated
+		 * @return <bool> isAvailable: true or false
+		 */
+		checkDateAvailability(date = 1) {
 			date = String(date).length == 1 ? `0${date}` : date;
-
 			const navDate = _.cloneDeep(this.navDate);
-			// navDate.set({ year: 2000 });
-			let { startDate, endDate, format } = this.datepickerOptions;
 
+			let { startDate, endDate, format } = this.datepickerOptions;
 			let startTimestamp = startDate
-				? parseInt(
-						moment(startDate, format)
-							.add(-1, "day")
-							.format("x")
-				  )
+				? parseInt(moment(startDate, format).format("x"))
 				: 0;
 			let endTimestamp = endDate
-				? parseInt(
-						moment(endDate, format)
-							.add(1, "day")
-							.format("x")
-				  )
+				? parseInt(moment(endDate, format).format("x"))
 				: 0;
 
 			let currentViewedMonthYear = navDate.format("MM-YYYY");
@@ -191,72 +209,52 @@ export default {
 				moment(newDate, "DD-MM-YYYY").format("x")
 			);
 
-			let isAvailable = true;
-			if (startTimestamp || endTimestamp) {
-				if (startTimestamp && endTimestamp) {
-					isAvailable =
-						newDateTimestamp >= startTimestamp &&
-						newDateTimestamp <= endTimestamp;
-				} else if (startTimestamp && !endTimestamp) {
-					isAvailable = newDateTimestamp >= startTimestamp;
-				} else if (!startTimestamp && endTimestamp) {
-					isAvailable = newDateTimestamp <= endTimestamp;
-				}
-			} else {
-				isAvailable = true;
-			}
+			let isAvailable = this.timeMixin__compareStartEndDate(
+				startTimestamp,
+				endTimestamp,
+				newDateTimestamp
+			);
 
 			return isAvailable;
 		},
-		isAvailable(num) {
-			let dateToCheck = this.dateFromNum(num, this.navDate);
-			if (dateToCheck.isBefore(moment(), "day")) {
-				return false;
-			} else {
-				return true;
-			}
-		},
+		/**
+		 * @desc return new date from referenced date and number 
+		 * @param 
+		 		<object> dateToCheck: the date to be checked, refers to the navDate
+		 		<number> num: the number of month to be added/substracted from currently
+		 				viewed month
+		 * @return none
+		 */
 		dateFromNum(num, referenceDate) {
 			let returnDate = moment(referenceDate);
 			return returnDate.date(num);
 		},
+		/**
+		 * @desc check the current date and the number of month to be added/substracted 
+		 * @param 
+		 		<object> dateToCheck: the date to be checked, refers to the navDate
+		 		<number> num: the number of month to be added/substracted from currently
+		 				viewed month
+		 * @return none
+		 */
 		canChangeNavMonth(dateToCheck, num) {
 			const clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "month");
 
-			let canChange = false;
-
 			let { startDate, endDate, format } = this.datepickerOptions;
-			let formattedStartDate = startDate
-				? moment(startDate, format).format("x")
-				: "";
-			let formattedEndDate = endDate
-				? moment(endDate, format).format("x")
-				: "";
-			let formattedClonedDate = clonedDate.format("x");
+			let result = this.timeMixin__canChangeNav(
+				{ startDate, endDate, clonedDate },
+				{ format, newFormat: "x" }
+			);
 
-			formattedStartDate = parseInt(formattedStartDate);
-			formattedEndDate = parseInt(formattedEndDate);
-			formattedClonedDate = parseInt(formattedClonedDate);
-
-			if (formattedStartDate || formattedEndDate) {
-				if (formattedStartDate && formattedEndDate) {
-					canChange =
-						formattedClonedDate >= formattedStartDate &&
-						formattedClonedDate <= formattedEndDate;
-				} else if (formattedStartDate && !formattedEndDate) {
-					canChange = formattedClonedDate >= formattedStartDate;
-				} else if (!formattedStartDate && formattedEndDate) {
-					canChange = formattedClonedDate <= formattedEndDate;
-				} else {
-					canChange = false;
-				}
-			} else {
-				canChange = true;
-			}
-			return canChange;
+			return result;
 		},
-		changeNavMonth(num) {
+		/**
+		 * @desc change the navDate on month navigation (prev or next)
+		 * @param <number> num: the number of month to be added/substracted
+		 * @return none
+		 */
+		changeNavMonth(num = 0) {
 			if (this.canChangeNavMonth(this.navDate, num, "month")) {
 				this.navDate.add(num, "month");
 			}
@@ -264,18 +262,36 @@ export default {
 				this.$forceUpdate();
 			});
 		},
-		selectDate(date) {
+		/**
+		 * @desc check the date and emitted the date to the parent on click
+		 * @param <object> date: the date to be checked and emitted
+		 * @return none
+		 */
+		selectDate(date = {}) {
+			let { startDate, endDate, format } = this.datepickerOptions;
 			if (date.available) {
 				this.selectedDate = this.dateFromNum(date.value, this.navDate);
-				let formattedDate = moment(this.selectedDate).format(
+				let dateString = moment(this.selectedDate).format(
 					this.datepickerOptions.format
 				);
-				this.$emit("input:date", formattedDate);
-				if (this.autoHide) {
-					this.$emit("click:date-item");
+				let isWithinRange = this.timeMixin__canChangeNav(
+					{ startDate, endDate, dateString },
+					{ format, newFormat: "x" }
+				);
+
+				if (isWithinRange) {
+					this.$emit("input:date", dateString);
+					if (this.autoHide) {
+						this.$emit("click:date-item");
+					}
 				}
 			}
 		},
+		/**
+		 * @desc set the week header (weekDaysHeaderArr) based on the moment locale
+		 * @param none
+		 * @return none
+		 */
 		setWeekHeader() {
 			const weekDaysArr = [0, 1, 2, 3, 4, 5, 6];
 			weekDaysArr.forEach(day =>
@@ -288,6 +304,11 @@ export default {
 		}
 	},
 	watch: {
+		/**
+		 * @desc watching the value from parent and do something when the value changes
+		 * @param <string> value: the date value to be checked
+		 * @return none
+		 */
 		value(val) {
 			if (val) {
 				this.setNavDateValue();

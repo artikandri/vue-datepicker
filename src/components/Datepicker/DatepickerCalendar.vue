@@ -71,6 +71,7 @@ export default {
 		};
 	},
 	mounted() {},
+	destroyed() {},
 	methods: {
 		setStep(step) {
 			this.step = step;

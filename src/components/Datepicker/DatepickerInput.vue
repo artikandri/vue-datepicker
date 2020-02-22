@@ -7,6 +7,7 @@
 			:value="date"
 			:readonly="trigger"
 			:disabled="trigger"
+			@enter="setDateValue"
 			@blur="toggleDatepickerInputFocus(false)"
 			@focus="toggleDatepickerInputFocus(true)"
 			@change="setDateValue"
@@ -30,8 +31,10 @@
 	</div>
 </template>
 <script>
+import timeMixin from "@mixins/timeMixin";
 export default {
-	name: "datepickerInput",
+	name: "DatepickerInput",
+	mixins: [timeMixin],
 	props: {
 		placeholder: {
 			type: String,
@@ -66,15 +69,30 @@ export default {
 	},
 	mounted() {},
 	methods: {
-		checkInputValidity(dateString) {
+		/**
+		 * @desc check the dateString validity by comparing it with the format
+		 * @param String: dateString
+		 * @return bool: true or false
+		 */
+		checkInputValidity(dateString = "") {
 			let { format } = this.datepickerOptions;
 			return moment(dateString, format, true).isValid();
 		},
-		toggleDatepickerInputFocus(focusValue) {
+		/**
+		 * @desc toggle the datepicker input focus in parent on input focus/blur
+		 * @param bool: focusValue
+		 * @return bool: true or false
+		 */
+		toggleDatepickerInputFocus(focusValue = false) {
 			if (!this.trigger) {
 				this.$emit("focus", focusValue);
 			}
 		},
+		/**
+		 * @desc check the dateString validity by comparing it with the format
+		 * @param String: dateString
+		 * @return bool: true or false
+		 */
 		toggleDatepickerPopoverOnTrigger() {
 			if (this.trigger) {
 				this.$emit("click:datepickerInputButton");
@@ -82,33 +100,14 @@ export default {
 		},
 		isWithinRange(dateString) {
 			let { startDate, endDate, format } = this.datepickerOptions;
-
-			let startTimestamp = startDate
-				? parseInt(moment(startDate, format).format("x"))
-				: 0;
-			let endTimestamp = endDate
-				? parseInt(moment(endDate, format).format("x"))
-				: 0;
-			let dateTimestamp = dateString
-				? parseInt(moment(dateString, format).format("x"))
-				: 0;
-
-			let isWithinRange = true;
-			if (startTimestamp || endTimestamp) {
-				if (startTimestamp && endTimestamp) {
-					isWithinRange =
-						dateTimestamp >= startTimestamp &&
-						dateTimestamp <= endTimestamp;
-				} else if (startTimestamp && !endTimestamp) {
-					isWithinRange = dateTimestamp >= startTimestamp;
-				} else if (!startTimestamp && endTimestamp) {
-					isWithinRange = dateTimestamp <= endTimestamp;
-				} else {
-					isWithinRange = false;
-				}
-			} else {
-				isWithinRange = true;
-			}
+			let isWithinRange = this.timeMixin__canChangeNav(
+				{
+					startDate,
+					endDate,
+					dateString
+				},
+				{ format, newFormat: "x" }
+			);
 
 			return isWithinRange;
 		},
@@ -126,11 +125,11 @@ export default {
 						this.$emit("update:datepickerInput", dateValue);
 					} else {
 						this.showWarning = true;
-						this.warningText = `Please enter the date between ${startDate} - ${endDate}`;
+						this.warningText = `Please  enter a date between ${startDate} to ${endDate}`;
 					}
 				} else {
 					this.showWarning = true;
-					this.warningText = `Please enter the date in format: ${format}`;
+					this.warningText = `Please enter the date in ${format} format`;
 				}
 			}
 		}, 500)
