@@ -5,6 +5,7 @@
 				<div class="calendar-nav">
 					<div class="calendar-nav-previous-month">
 						<button
+							type="button"
 							class="btn btn-ghost btn-icon"
 							:disabled="!canChangeNavYear(navDate, -1)"
 							@click="changeNavYear(-1)"
@@ -18,12 +19,13 @@
 					>
 						{{ navDate.format("YYYY") }}
 					</button>
-					<div
-						class="calendar-nav-next-month"
-						:disabled="!canChangeNavYear(navDate, 1)"
-						@click="changeNavYear(1)"
-					>
-						<button class="btn btn-ghost btn-icon">
+					<div class="calendar-nav-next-month">
+						<button
+							class="btn btn-ghost btn-icon"
+							type="button"
+							:disabled="!canChangeNavYear(navDate, 1)"
+							@click="changeNavYear(1)"
+						>
 							<i class="fa fa-chevron-right"></i>
 						</button>
 					</div>
@@ -86,9 +88,10 @@ export default {
 	},
 	methods: {
 		setNavDateValue() {
-			this.navDate = this.value
-				? moment(this.value, this.datepickerOptions.format)
-				: moment();
+			let { startDate, format } = this.datepickerOptions;
+			let dateString = this.value || startDate || null;
+
+			this.navDate = dateString ? moment(dateString, format) : moment();
 		},
 		setMonths() {
 			const monthsArr = Array.from(Array(12).keys());
@@ -111,36 +114,51 @@ export default {
 		checkMonthAvailability(month) {
 			const navDate = _.cloneDeep(this.navDate);
 
-			// set dates
+			// set date to check
 			let { startDate, endDate, format } = this.datepickerOptions;
 			let startTimestamp = startDate
-				? parseInt(
-						moment(startDate, format)
-							.add(-1, "day")
-							.format("x")
-				  )
+				? parseInt(moment(startDate, format).format("x"))
 				: 0;
 			let endTimestamp = endDate
-				? parseInt(
-						moment(endDate, format)
-							.add(1, "day")
-							.format("x")
-				  )
+				? parseInt(moment(endDate, format).format("x"))
 				: 0;
-			let currentViewedMonthYear = navDate.format("DD-MM-YYYY");
-			currentViewedMonthYear = currentViewedMonthYear.split("-");
-			let newDate = `${currentViewedMonthYear[0]}-${month}-${currentViewedMonthYear[2]}`;
-			let newDateTimestamp = moment(newDate, "DD-MM-YYYY").format("x");
+
+			// set month to check
+			let startMonth = startDate
+				? parseInt(moment(startDate, format).format("MM"))
+				: 0;
+			let endMonth = endDate
+				? parseInt(moment(endDate, format).format("MM"))
+				: 0;
+
+			let date = "01";
+			if (month == startMonth) {
+				date = moment(startTimestamp, "x").format("DD");
+			} else if (month == endMonth) {
+				date = moment(endTimestamp, "x").format("DD");
+			} else {
+				// do something
+			}
+
+			// set date to check
+			let currentYear = navDate.format("YYYY");
+			let newDate = `${date}-${month}-${currentYear}`;
+			let newDateTimestamp = parseInt(
+				moment(newDate, "DD-MM-YYYY").format("x")
+			);
+
+			console.log(newDate);
 
 			let isAvailable = this.timeMixin__compareStartEndDate(
 				startTimestamp,
 				endTimestamp,
 				newDateTimestamp
 			);
+
 			return isAvailable;
 		},
-		selectMonth(month) {
-			let { format } = this.datepickerOptions;
+		selectMonth(month = "Jan") {
+			let { startDate, endDate, format } = this.datepickerOptions;
 			let selectionFormat = "DD MMM YYYY";
 			let year = this.navDate.format("YYYY");
 			if (month.available) {
@@ -154,8 +172,18 @@ export default {
 					format
 				);
 
-				this.$emit("input:date", date);
-				this.$emit("click:monthButton", 2);
+				let isWithinRange = this.timeMixin__canChangeNav(
+					{ startDate, endDate, dateString: date },
+					{ format }
+				);
+				if (isWithinRange) {
+					this.$emit("input:date", date);
+					this.$emit("click:monthButton", 2);
+				} else {
+					throw new Error(`The max date is ${endDate || "unknown"}`);
+				}
+			} else {
+				throw new Error("The picked month is unavailable");
 			}
 		},
 		setDatepickerLocale() {

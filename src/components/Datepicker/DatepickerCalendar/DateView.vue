@@ -22,15 +22,16 @@
 				>
 					{{ navDate.format(monthFormat) }}
 				</button>
-				<div
-					class="calendar-nav-next-month"
-					:disabled="!canChangeNavMonth(navDate, 1)"
-					@click="
-						changeNavMonth(1);
-						setDates();
-					"
-				>
-					<button type="button" class="btn btn-ghost btn-icon">
+				<div class="calendar-nav-next-month">
+					<button
+						type="button"
+						class="btn btn-ghost btn-icon"
+						:disabled="!canChangeNavMonth(navDate, 1)"
+						@click="
+							changeNavMonth(1);
+							setDates();
+						"
+					>
 						<i class="fa fa-chevron-right"></i>
 					</button>
 				</div>
@@ -142,9 +143,10 @@ export default {
 		 * @return none
 		 */
 		setNavDateValue() {
-			this.navDate = this.value
-				? moment(this.value, this.datepickerOptions.format)
-				: moment();
+			let { startDate, format } = this.datepickerOptions;
+			let dateString = this.value || startDate || null;
+
+			this.navDate = dateString ? moment(dateString, format) : moment();
 		},
 		/**
 		 * @desc set the moment locale based on the option from parent
@@ -278,20 +280,27 @@ export default {
 			let { startDate, endDate, format } = this.datepickerOptions;
 			if (date.available) {
 				this.selectedDate = this.dateFromNum(date.value, this.navDate);
-				let dateString = moment(this.selectedDate).format(
-					this.datepickerOptions.format
-				);
+				let dateString = moment(this.selectedDate).format(format);
 				let isWithinRange = this.timeMixin__canChangeNav(
 					{ startDate, endDate, dateString },
 					{ format, newFormat: "x" }
 				);
 
-				if (isWithinRange) {
+				if (
+					isWithinRange &&
+					String(dateString).toLowerCase() !== "invalid date"
+				) {
 					this.$emit("input:date", dateString);
 					if (this.autoHide) {
 						this.$emit("click:date-item");
 					}
+				} else {
+					throw new Error(
+						"The selected date is not within time range or invalid"
+					);
 				}
+			} else {
+				throw new Error("The selected date is not available");
 			}
 		},
 		/**

@@ -16,12 +16,13 @@
 					{{ fromYear }}
 					-
 					{{ toYear }}
-					<div
-						class="calendar-nav-next-year"
-						:disabled="!canChangeNavYear(navDate, 4)"
-						@click="changeNavYear(4)"
-					>
-						<button type="button" class="btn btn-ghost btn-icon">
+					<div class="calendar-nav-next-year">
+						<button
+							type="button"
+							class="btn btn-ghost btn-icon"
+							:disabled="!canChangeNavYear(navDate, 4)"
+							@click="changeNavYear(4)"
+						>
 							<i class="fa fa-chevron-right"></i>
 						</button>
 					</div>
@@ -124,9 +125,10 @@ export default {
 		 * @return none
 		 */
 		setNavDateValue() {
-			this.navDate = this.value
-				? moment(this.value, this.datepickerOptions.format)
-				: moment();
+			let { startDate, format } = this.datepickerOptions;
+			let dateString = this.value || startDate || null;
+
+			this.navDate = dateString ? moment(dateString, format) : moment();
 		},
 		/**
 		 * @desc set the year array
@@ -175,6 +177,8 @@ export default {
 
 				this.$emit("input:date", date);
 				this.$emit("click:yearButton", 1);
+			} else {
+				throw new Error("The selected year is not available");
 			}
 		},
 		/**
@@ -182,22 +186,23 @@ export default {
 		 * @param none
 		 * @return bool: true or false
 		 */
-		checkYearAvailability(year) {
+		checkYearAvailability(year = 0) {
 			let { startDate, endDate, format } = this.datepickerOptions;
-			let startYear = startDate
-				? moment(startDate, format).format("YYYY")
-				: 0;
-			startYear = parseInt(startYear);
-			let endYear = endDate ? moment(endDate, format).format("YYYY") : 0;
-			endYear = parseInt(endYear);
-			let currentYear = endDate
-				? moment(this.value, format).format("YYYY")
-				: 0;
-			currentYear = parseInt(currentYear);
+			// format the date
+			year = parseInt(year);
+			let dateString = moment(startDate, format)
+				.set({ year: year })
+				.format(format);
+			let isWithinRange = this.timeMixin__canChangeNav(
+				{
+					startDate,
+					endDate,
+					dateString
+				},
+				{ format, newFormat: "YYYY" }
+			);
 
-			let isNextYear = year > currentYear;
-
-			return isNextYear ? year <= endYear : year >= startYear;
+			return isWithinRange;
 		},
 		/**
 		 * @desc set the moment locale from available options
