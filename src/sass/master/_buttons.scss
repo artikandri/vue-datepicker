@@ -4,6 +4,11 @@ $buttons: (
 		text: $brand-white,
 		border: $brand-primary
 	),
+	default: (
+		base: $brand-white,
+		text: $dark-secondary,
+		border: $brand-gray
+	),
 	light: (
 		base: $brand-white,
 		text: transparent,
@@ -31,3 +36,6 @@ $buttons: (
 		}
 	}
 }
+
+@include createBemStylingForButtons($buttons);
+

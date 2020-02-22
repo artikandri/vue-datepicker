@@ -42,7 +42,7 @@
 						<li
 							class="calendar-week-list__item"
 							:key="'week' + idx"
-							v-for="(week, idx) in weekDaysHeaderArr"
+							v-for="(week, idx) in weekDaysArr"
 						>
 							{{ week }}
 						</li>
@@ -111,7 +111,7 @@ export default {
 	},
 	data() {
 		return {
-			weekDaysHeaderArr: [],
+			weekDaysArr: [],
 			gridArr: [],
 			navDate: moment()
 		};
@@ -327,25 +327,27 @@ export default {
 			}
 		},
 		/**
-		 * @desc set the week header (weekDaysHeaderArr) based on the moment locale
+		 * @desc set the week header (weekDaysArr) based on the moment locale
 		 * @param none
 		 * @return none
 		 */
 		setWeekHeader() {
 			const weekDaysArr = [0, 1, 2, 3, 4, 5, 6];
+			let weekDays = [];
 			weekDaysArr.forEach(day =>
-				this.weekDaysHeaderArr.push(
+				weekDays.push(
 					moment()
 						.weekday(day)
 						.format("ddd")
 				)
 			);
+			this.weekDaysArr = weekDays;
 		}
 	},
 	watch: {
 		/**
-		 * @desc watching the value from parent and do something when the value changes
-		 * @param <string> value: the date value to be checked
+		 * @desc watch the value from parent v-model and do something when it changes
+		 * @param <string> value: the date to be checked
 		 * @return none
 		 */
 		value(val) {
@@ -354,6 +356,19 @@ export default {
 				this.$nextTick(() => {
 					this.setDates();
 				});
+			}
+		},
+		/**
+		 * @desc watch the datepickerOptions and do something when it changes
+		 * @param <object> value: the date to be checked
+		 * @return none
+		 */
+		datepickerOptions(val) {
+			if (val) {
+				this.setDatepickerLocale();
+				this.setNavDateValue();
+				this.setWeekHeader();
+				this.setDates();
 			}
 		}
 	}

@@ -2,3 +2,17 @@
 	font-size: #{map-get($size, "px") * $multiplier}px;
 	font-size: #{map-get($size, "rem") * $multiplier}rem;
 }
+
+@mixin createBemStyling(
+	$propertyName,
+	$propertyValues,
+	$className,
+	$isImportant: true
+) {
+	@each $value in $propertyValues {
+		.#{$className}-#{$value} {
+			#{$propertyName}: #{$value} #{if($isImportant, "!important", "")};
+		}
+	}
+}
+

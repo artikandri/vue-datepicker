@@ -287,6 +287,18 @@ export default {
 					this.setMonths();
 				});
 			}
+		},
+		/**
+		 * @desc watch the datepickerOptions and do something when it changes
+		 * @param <object> value: the date to be checked
+		 * @return none
+		 */
+		datepickerOptions(val) {
+			if (val) {
+				this.setDatepickerLocale();
+				this.setNavDateValue();
+				this.setMonths();
+			}
 		}
 	}
 };

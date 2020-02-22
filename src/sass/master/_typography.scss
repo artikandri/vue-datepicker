@@ -1,0 +1,9 @@
+$textColors: (
+	primary: $brand-primary,
+	danger: $brand-danger,
+	warning: $brand-warning,
+	light: $brand-white,
+	dark: $brand-dark
+);
+
+@include createBemStyling("color", $textColors, "text");

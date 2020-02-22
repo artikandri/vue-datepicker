@@ -1,31 +1,38 @@
 <template>
 	<div class="datepicker-form">
-		<input
-			type="text"
-			class="datepicker-input"
-			:placeholder="placeholder"
-			:value="date"
-			:readonly="trigger"
-			:disabled="trigger"
-			@enter="setDateValue"
-			@blur="toggleDatepickerInputFocus(false)"
-			@focus="toggleDatepickerInputFocus(true)"
-			@change="setDateValue"
-		/>
-		<button
-			type="button"
-			name="datepickerButton"
-			:disabled="!trigger"
-			class="btn btn-datepicker"
-			@click="toggleDatepickerPopoverOnTrigger"
-		>
-			<i
-				class="fa fa-calendar btn-datepicker-icon"
-				name="datepickerButtonIcon"
-				aria-hidden="true"
-			></i>
-		</button>
-		<small v-show="showWarning" class="text-danger">
+		<div class="form-group datepicker-form__form-group">
+			<div
+				class="datepicker-form__input-group input-group input-group--append"
+			>
+				<input
+					type="text"
+					aria-label="date input"
+					class="datepicker-form__input datepicker-input "
+					placeholder="Pick a date"
+					:value="date"
+					:readonly="trigger"
+					:disabled="trigger"
+					@enter="setDateValue"
+					@blur="toggleDatepickerInputFocus(false)"
+					@focus="toggleDatepickerInputFocus(true)"
+					@change="setDateValue"
+				/>
+				<button
+					type="button"
+					name="datepickerButton"
+					:disabled="!trigger"
+					class="btn btn-datepicker btn-default datepicker-form__button"
+					@click="toggleDatepickerPopoverOnTrigger"
+				>
+					<i
+						class="fa fa-calendar btn-datepicker-icon"
+						name="datepickerButtonIcon"
+						aria-hidden="true"
+					></i>
+				</button>
+			</div>
+		</div>
+		<small v-show="showWarning" class="datepicker-form__error  text-danger">
 			{{ warningText }}
 		</small>
 	</div>
@@ -36,12 +43,6 @@ export default {
 	name: "DatepickerInput",
 	mixins: [timeMixin],
 	props: {
-		placeholder: {
-			type: String,
-			default() {
-				return "Pick a date";
-			}
-		},
 		trigger: {
 			type: Boolean,
 			default() {

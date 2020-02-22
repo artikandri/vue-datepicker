@@ -7,11 +7,12 @@ $brand-warning: #cbb956;
 $brand-danger: #bf5329;
 $brand-disabled: #d8d8d8;
 $brand-white: #fff;
+$brand-dark: #424242;
 $brand-gray: #fafafa;
 
 // dark colors
 $dark-primary: #424242;
-$dark-secondary: #303030;
+$dark-secondary: #6c757d;
 
 // breakpoints
 $breakpoints: (
@@ -26,12 +27,16 @@ $breakpoints: (
 // typography
 $font-family-sans-serif: "Roboto-Regular", "Arial", sans-serif;
 $text-color: #424242;
-$line-height-base: 1.6;
+$text-disabled: #6c757d;
+$line-height: 1.5;
 
-// Buttons
-$btn-default-color: $text-color;
+$fontSize: (
+	"px": 14,
+	"rem": 1
+);
 
 // Inputs
-$input-border: lighten($text-color, 40%);
+$input-border-color: lighten($text-color, 40%);
 $input-border-focus: lighten($brand-primary, 25%);
 $input-color-placeholder: lighten($text-color, 30%);
+$border-radius: 0.25rem;
