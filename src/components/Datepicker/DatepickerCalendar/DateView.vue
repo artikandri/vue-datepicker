@@ -4,6 +4,7 @@
 			<div class="calendar-nav">
 				<div class="calendar-nav-previous-month">
 					<button
+						type="button"
 						class="btn btn-ghost btn-icon"
 						:disabled="!canChangeNavMonth(navDate, -1)"
 						@click="
@@ -14,7 +15,11 @@
 						<i class="fa fa-chevron-left"></i>
 					</button>
 				</div>
-				<button name="dateButton" @click="$emit('click:dateButton', 0)">
+				<button
+					type="button"
+					name="dateButton"
+					@click="$emit('click:dateButton', 0)"
+				>
 					{{ navDate.format(monthFormat) }}
 				</button>
 				<div
@@ -25,7 +30,7 @@
 						setDates();
 					"
 				>
-					<button class="btn btn-ghost btn-icon">
+					<button type="button" class="btn btn-ghost btn-icon">
 						<i class="fa fa-chevron-right"></i>
 					</button>
 				</div>
@@ -50,6 +55,7 @@
 							v-for="(date, idx) in gridArr"
 						>
 							<button
+								type="button"
 								v-if="date.value !== 0"
 								@click="selectDate(date)"
 								class="date-item"
@@ -58,6 +64,7 @@
 								{{ date.value }}
 							</button>
 							<button
+								type="button"
 								v-if="date.value === 0"
 								class="date-item btn btn-date"
 							></button>

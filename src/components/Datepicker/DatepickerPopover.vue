@@ -1,5 +1,5 @@
 <template>
-	<div class="">
+	<div class="datepicker-popover">
 		popover
 		<slot></slot>
 	</div>

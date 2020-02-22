@@ -38,7 +38,7 @@
 		<datepicker-container ref="datepickerContainer" v-if="container">
 			<datepicker-calendar
 				ref="datepickerCalendar"
-				v-show="isContainerShown"
+				v-if="isContainerShown"
 				:value="value"
 				@click:date-item="hidePopover"
 				@input:date="updateDatepickerValue"
@@ -59,7 +59,7 @@ import DatepickerCalendar from "@components/Datepicker/DatepickerCalendar.vue";
 import DatepickerContainer from "@components/Datepicker/DatepickerContainer.vue";
 
 export default {
-	name: "DatepickerWrapper",
+	name: "Datepicker",
 	mixins: [timeMixin],
 	props: {
 		value: {
@@ -327,7 +327,6 @@ export default {
 		 * @return none
 		 */
 		turnOffPopoverHover($event) {
-			this.isPopoverHovered = false;
 			this.$nextTick(() => {
 				if ($event && $event.target) {
 					const targetClass = String($event.target.className);
@@ -335,29 +334,32 @@ export default {
 						"btn-datepicker",
 						"btn-datepicker-icon",
 						"btn-year",
+						"datepicker-popover",
 						"btn-month",
 						"btn-date"
 					];
 
+					let hasSlices = false;
 					if (this.trigger) {
-						let hasSlices = _.intersection(
-							prevent,
-							targetClass.split(" ")
-						).length;
-						if (!hasSlices) {
-							this.isPopoverInTrigger = false;
-							this.isFocused = false;
-						}
-					} else {
-						prevent = prevent.concat(["datepicker-input"]);
-						let hasSlices = _.intersection(
+						hasSlices = _.intersection(
 							prevent,
 							targetClass.split(" ")
 						).length;
 
 						if (!hasSlices) {
-							this.isFocused = false;
+							this.isPopoverInTrigger = false;
 						}
+					} else {
+						prevent = prevent.concat(["datepicker-input"]);
+						hasSlices = _.intersection(
+							prevent,
+							targetClass.split(" ")
+						).length;
+					}
+
+					if (!hasSlices) {
+						this.isFocused = false;
+						this.isPopoverHovered = false;
 					}
 				} else {
 					// do something

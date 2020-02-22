@@ -5,6 +5,7 @@
 				<div class="calendar-nav">
 					<div class="calendar-nav-previous-year">
 						<button
+							type="button"
 							class="btn btn-ghost btn-icon"
 							:disabled="!canChangeNavYear(navDate, -4)"
 							@click="changeNavYear(-4)"
@@ -20,7 +21,7 @@
 						:disabled="!canChangeNavYear(navDate, 4)"
 						@click="changeNavYear(4)"
 					>
-						<button class="btn btn-ghost btn-icon">
+						<button type="button" class="btn btn-ghost btn-icon">
 							<i class="fa fa-chevron-right"></i>
 						</button>
 					</div>
@@ -35,6 +36,7 @@
 								v-for="(year, idx) in yearsArr"
 							>
 								<button
+									type="button"
 									class="btn btn-year year-item"
 									:disabled="!year.available"
 								>
@@ -98,9 +100,10 @@ export default {
 		 * @return String in YYYY format (ex: 2010)
 		 */
 		fromYear() {
-			return moment(this.value, this.datepickerOptions.format)
-				.add(-4, "year")
-				.format("YYYY");
+			const navDate = this.value
+				? moment(this.value, this.datepickerOptions.format)
+				: moment();
+			return navDate.add(-4, "year").format("YYYY");
 		},
 		/**
 		 * @desc retrieve the last year of the range displayed on the calendar
@@ -108,9 +111,10 @@ export default {
 		 * @return String in YYYY format (ex: 2010)
 		 */
 		toYear() {
-			return moment(this.value, this.datepickerOptions.format)
-				.add(4, "year")
-				.format("YYYY");
+			const navDate = this.value
+				? moment(this.value, this.datepickerOptions.format)
+				: moment();
+			return navDate.add(4, "year").format("YYYY");
 		}
 	},
 	methods: {
