@@ -234,7 +234,7 @@ export default {
 		 				viewed month
 		 * @return none
 		 */
-		dateFromNum(num, referenceDate) {
+		dateFromNum(num = 1, referenceDate = "") {
 			let returnDate = moment(referenceDate);
 			return returnDate.date(num);
 		},
@@ -246,11 +246,32 @@ export default {
 		 				viewed month
 		 * @return none
 		 */
-		canChangeNavMonth(dateToCheck, num) {
-			const clonedDate = moment(dateToCheck);
+		canChangeNavMonth(dateToCheck = "", num = 1) {
+			let { startDate, endDate, format } = this.datepickerOptions;
+			let clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "month");
 
-			let { startDate, endDate, format } = this.datepickerOptions;
+			// set month to be checked
+			let clonedMonth = clonedDate.format("MMMM");
+			let startMonth = moment(startDate, format).format("MMMM");
+			let endMonth = moment(endDate, format).format("MMMM");
+
+			// set clonedDate
+			if (clonedMonth == startMonth) {
+				clonedDate.set({
+					month: startMonth,
+					date: moment(startDate, format).format("DD")
+				});
+			} else if (clonedMonth == endMonth) {
+				let date = new Date(endDate).getDate();
+				clonedDate.set({
+					date,
+					month: endMonth
+				});
+			} else {
+				clonedDate.set({ month: clonedMonth, date: "01" });
+			}
+
 			let result = this.timeMixin__canChangeNav(
 				{ startDate, endDate, clonedDate },
 				{ format, newFormat: "x" }

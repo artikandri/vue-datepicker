@@ -175,31 +175,51 @@ export default {
 		 * @param <string> month: the month short name
 		 * @return none
 		 */
-		selectMonth(month = "Jan") {
+		selectMonth(month = {}) {
 			let { startDate, endDate, format } = this.datepickerOptions;
-			let selectionFormat = "DD MMM YYYY";
 			let year = this.navDate.format("YYYY");
+
 			if (month.available) {
-				let formattedValue = moment(this.value, format).format(
-					selectionFormat
-				);
-				let split = formattedValue.split(" ");
-				split[1] = month.value;
-				split[2] = year;
-				let date = moment(split.join(" "), selectionFormat).format(
-					format
-				);
+				let startMonth = startDate
+					? moment(startDate, format).format("MMM")
+					: "";
+				let endMonth = endDate
+					? moment(endDate, format).format("MMM")
+					: "";
+
+				let currentMonth = month.value;
+				let dateString = moment().format(format);
+				if (currentMonth == startMonth) {
+					const navDate = _.cloneDeep(this.navDate);
+					let date = moment(startDate, format).format("DD");
+					dateString = navDate
+						.set({ month: startMonth, year: year, date: date })
+						.format(format);
+				} else if (currentMonth == endMonth) {
+					const navDate = _.cloneDeep(this.navDate);
+					let date = moment(endDate, format).format("DD");
+					dateString = navDate
+						.set({ month: endMonth, year: year, date: date })
+						.format(format);
+				} else {
+					const navDate = _.cloneDeep(this.navDate);
+					dateString = navDate
+						.set({ month: currentMonth, year: year })
+						.format(format);
+				}
 
 				let isWithinRange = this.timeMixin__canChangeNav(
-					{ startDate, endDate, dateString: date },
+					{ startDate, endDate, dateString },
 					{ format }
 				);
+
+				// emit data
 				if (isWithinRange) {
-					this.$emit("input:date", date);
+					this.$emit("input:date", dateString);
 					this.$emit("click:monthButton", 2);
 				} else {
 					throw new Error(
-						`(MonthView.vue) Error when selecting month: The max date is ${endDate ||
+						`(MonthView.vue) Error when selecting month: The time range should be between ${startDate} to ${endDate ||
 							"unknown"}`
 					);
 				}
