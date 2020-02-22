@@ -162,7 +162,7 @@ export default {
 		 * @param none
 		 * @return none
 		 */
-		selectYear(year) {
+		selectYear(year = {}) {
 			let { format } = this.datepickerOptions;
 			let selectionFormat = "DD MMM YYYY";
 			if (year.available) {
@@ -178,7 +178,9 @@ export default {
 				this.$emit("input:date", date);
 				this.$emit("click:yearButton", 1);
 			} else {
-				throw new Error("The selected year is not available");
+				throw new Error(
+					"(YearView.vue) Error when selecting year: The selected year is not available"
+				);
 			}
 		},
 		/**
@@ -218,7 +220,7 @@ export default {
 		 * @param none
 		 * @return bool: true or false
 		 */
-		canChangeNavYear(dateToCheck, num) {
+		canChangeNavYear(dateToCheck = "", num = 1) {
 			const clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "year");
 
@@ -235,7 +237,7 @@ export default {
 		 * @param none
 		 * @return none
 		 */
-		changeNavYear(num) {
+		changeNavYear(num = 1) {
 			if (this.canChangeNavYear(this.navDate, num)) {
 				this.navDate.add(num, "year");
 

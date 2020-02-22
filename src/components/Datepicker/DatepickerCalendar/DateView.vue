@@ -296,11 +296,13 @@ export default {
 					}
 				} else {
 					throw new Error(
-						"The selected date is not within time range or invalid"
+						"(DateView.vue) Error when selecting date: The selected date is not within time range or invalid"
 					);
 				}
 			} else {
-				throw new Error("The selected date is not available");
+				throw new Error(
+					"(DateView.vue) Error when selecting date: The selected date is not available"
+				);
 			}
 		},
 		/**

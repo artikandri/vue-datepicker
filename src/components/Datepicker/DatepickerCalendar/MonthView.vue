@@ -87,12 +87,22 @@ export default {
 		this.setMonths();
 	},
 	methods: {
+		/**
+		 * @desc set the nav date value on first load
+		 * @param none
+		 * @return none
+		 */
 		setNavDateValue() {
 			let { startDate, format } = this.datepickerOptions;
 			let dateString = this.value || startDate || null;
 
 			this.navDate = dateString ? moment(dateString, format) : moment();
 		},
+		/**
+		 * @desc set the months array to be displayed on the calendar
+		 * @param none
+		 * @return none
+		 */
 		setMonths() {
 			const monthsArr = Array.from(Array(12).keys());
 			let result = [];
@@ -111,7 +121,12 @@ export default {
 				this.monthsArr = _.cloneDeep(result);
 			});
 		},
-		checkMonthAvailability(month) {
+		/**
+		 * @desc check the month availability
+		 * @param <string> month: the month in MM format (ex: 01 for January)
+		 * @return none
+		 */
+		checkMonthAvailability(month = "01") {
 			const navDate = _.cloneDeep(this.navDate);
 
 			// set date to check
@@ -147,8 +162,6 @@ export default {
 				moment(newDate, "DD-MM-YYYY").format("x")
 			);
 
-			console.log(newDate);
-
 			let isAvailable = this.timeMixin__compareStartEndDate(
 				startTimestamp,
 				endTimestamp,
@@ -157,6 +170,11 @@ export default {
 
 			return isAvailable;
 		},
+		/**
+		 * @desc select month and emitted the changed date value
+		 * @param <string> month: the month short name
+		 * @return none
+		 */
 		selectMonth(month = "Jan") {
 			let { startDate, endDate, format } = this.datepickerOptions;
 			let selectionFormat = "DD MMM YYYY";
@@ -180,17 +198,34 @@ export default {
 					this.$emit("input:date", date);
 					this.$emit("click:monthButton", 2);
 				} else {
-					throw new Error(`The max date is ${endDate || "unknown"}`);
+					throw new Error(
+						`(MonthView.vue) Error when selecting month: The max date is ${endDate ||
+							"unknown"}`
+					);
 				}
 			} else {
-				throw new Error("The picked month is unavailable");
+				throw new Error(
+					"(MonthView.vue) Error when selecting month: The selected month is not available"
+				);
 			}
 		},
+		/**
+		 * @desc set the datepicker locale based on language
+		 * @param none
+		 * @return none
+		 */
 		setDatepickerLocale() {
 			let localeString = this.datepickerOptions.language || "en";
 			moment.locale(localeString);
 		},
-		canChangeNavYear(dateToCheck, num) {
+		/**
+		 * @desc check the date
+		 * @param 
+		 	<string> dateToCheck: the date value to be checked
+		 	<number> num: the number of year to be added/substracted from checked date
+		 * @return <bool>: true or false
+		 */
+		canChangeNavYear(dateToCheck = "", num = 1) {
 			const clonedDate = moment(dateToCheck);
 			clonedDate.add(num, "year");
 
@@ -202,7 +237,14 @@ export default {
 
 			return result;
 		},
-		changeNavYear(num) {
+		/**
+		 * @desc change the nav year on prev/next nav button click
+		 * @param 
+		 	<number> num: 
+		 		the number of year to be substracted from currently viewed date
+		 * @return none
+		 */
+		changeNavYear(num = 1) {
 			if (this.canChangeNavYear(this.navDate, num, "year")) {
 				this.navDate.add(num, "year");
 			}
@@ -213,6 +255,11 @@ export default {
 		}
 	},
 	watch: {
+		/**
+		 * @desc watching the value from parent and do something when the value changes
+		 * @param <string> value: the date value to be checked
+		 * @return none
+		 */
 		value(val) {
 			if (val) {
 				this.setNavDateValue();
