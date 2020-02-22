@@ -7,6 +7,10 @@ const timeMixin = {
 			newDateTimestamp
 		) {
 			let isAvailable = true;
+			startTimestamp = parseInt(startTimestamp);
+			endTimestamp = parseInt(endTimestamp);
+			newDateTimestamp = parseInt(newDateTimestamp);
+
 			if (startTimestamp || endTimestamp) {
 				if (startTimestamp && endTimestamp) {
 					isAvailable =
@@ -16,6 +20,8 @@ const timeMixin = {
 					isAvailable = newDateTimestamp >= startTimestamp;
 				} else if (!startTimestamp && endTimestamp) {
 					isAvailable = newDateTimestamp <= endTimestamp;
+				} else {
+					isAvailable = true;
 				}
 			} else {
 				isAvailable = true;

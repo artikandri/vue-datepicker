@@ -1,0 +1,23 @@
+/*  partials: normalize the html */
+@import "partials/normalize";
+
+/*  master: collections of mixins and variables used */
+@import "master/variables";
+@import "master/mixins";
+
+/*  master: collections of stylings for general element */
+@import "master/master";
+@import "master/inputs";
+@import "master/buttons";
+
+/*  master: collections of stylings for calendar components */
+@import "datepicker/date-view";
+@import "datepicker/month-view";
+@import "datepicker/year-view";
+
+/*  master: collections of stylings for datepicker components */
+@import "datepicker/datepicker-input";
+@import "datepicker/datepicker-calendar";
+@import "datepicker/datepicker-popover";
+@import "datepicker/datepicker-container";
+@import "datepicker/datepicker-wrapper";

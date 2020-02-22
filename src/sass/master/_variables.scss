@@ -1,0 +1,37 @@
+// Brands
+$brand-primary: #0090ef;
+$brand-primary-200: #007fde;
+$brand-info: #0090ef;
+$brand-success: #00b348;
+$brand-warning: #cbb956;
+$brand-danger: #bf5329;
+$brand-disabled: #d8d8d8;
+$brand-white: #fff;
+$brand-gray: #fafafa;
+
+// dark colors
+$dark-primary: #424242;
+$dark-secondary: #303030;
+
+// breakpoints
+$breakpoints: (
+	xl: 1200px,
+	lg: 992px,
+	md: 768px,
+	sm: 576px,
+	xs: 480px,
+	xxs: 360px
+);
+
+// typography
+$font-family-sans-serif: "Roboto-Regular", "Arial", sans-serif;
+$text-color: #424242;
+$line-height-base: 1.6;
+
+// Buttons
+$btn-default-color: $text-color;
+
+// Inputs
+$input-border: lighten($text-color, 40%);
+$input-border-focus: lighten($brand-primary, 25%);
+$input-color-placeholder: lighten($text-color, 30%);

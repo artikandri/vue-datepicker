@@ -39,13 +39,7 @@ export default {
 			date: ""
 		};
 	},
-	mounted() {
-		setTimeout(() => {
-			if (this.$refs.datepicker) {
-				this.$refs.datepicker.destroy();
-			}
-		}, 1000);
-	},
+	mounted() {},
 	methods: {}
 };
 </script>
