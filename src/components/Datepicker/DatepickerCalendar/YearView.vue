@@ -6,7 +6,7 @@
 					<div class="calendar-nav-previous-year">
 						<button
 							type="button"
-							class="btn btn-ghost btn-icon"
+							class="btn btn-datepicker btn-default btn-icon"
 							:disabled="!canChangeNavYear(navDate, -4)"
 							@click="changeNavYear(-4)"
 						>
@@ -21,7 +21,7 @@
 					<div class="calendar-nav-next-year">
 						<button
 							type="button"
-							class="btn btn-ghost btn-icon"
+							class="btn btn-datepicker btn-default btn-icon"
 							:disabled="!canChangeNavYear(navDate, 4)"
 							@click="changeNavYear(4)"
 						>
@@ -40,7 +40,7 @@
 								<button
 									type="button"
 									@click="selectYear(year)"
-									class="btn btn-year year-item"
+									class="btn btn-year btn-default year-item btn-datepicker"
 									:disabled="!year.available"
 								>
 									<time :year="year.value">
@@ -82,6 +82,30 @@ export default {
 			type: Object,
 			default() {
 				return {};
+			}
+		},
+		mutedClass: {
+			type: String,
+			default() {
+				return "muted";
+			}
+		},
+		disabledClass: {
+			type: String,
+			default() {
+				return "disabled";
+			}
+		},
+		pickedClass: {
+			type: String,
+			default() {
+				return "picked";
+			}
+		},
+		highlightedClass: {
+			type: String,
+			default() {
+				return "highlighted";
 			}
 		}
 	},

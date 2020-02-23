@@ -5,19 +5,20 @@
 				<div class="calendar-nav-previous-month">
 					<button
 						type="button"
-						class="btn btn-ghost btn-icon"
+						class="btn btn-datepicker btn-nav btn-icon"
 						:disabled="!canChangeNavMonth(navDate, -1)"
 						@click="
 							changeNavMonth(-1);
 							setDates();
 						"
 					>
-						<i class="fa fa-chevron-left"></i>
+						<i class="fa fa-chevron-left" aria-hidden="true"></i>
 					</button>
 				</div>
 				<button
 					type="button"
 					name="dateButton"
+					class="btn btn-datepicker btn-default"
 					@click="$emit('click:dateButton', 0)"
 				>
 					{{ navDate.format(monthFormat) }}
@@ -25,14 +26,14 @@
 				<div class="calendar-nav-next-month">
 					<button
 						type="button"
-						class="btn btn-ghost btn-icon"
+						class="btn btn-datepicker btn-icon"
 						:disabled="!canChangeNavMonth(navDate, 1)"
 						@click="
 							changeNavMonth(1);
 							setDates();
 						"
 					>
-						<i class="fa fa-chevron-right"></i>
+						<i class="fa fa-chevron-right" aria-hidden="true"></i>
 					</button>
 				</div>
 			</nav>
@@ -59,7 +60,7 @@
 								type="button"
 								v-if="date.value !== 0"
 								@click="selectDate(date)"
-								class="btn btn-date btn-datepicker date-item"
+								class="btn btn-date btn-datepicker btn-default date-item"
 								:disabled="!date.available"
 							>
 								<time
@@ -74,7 +75,7 @@
 								type="button"
 								disabled
 								v-if="date.value === 0"
-								class="btn btn-date btn-datepicker date-item"
+								class="btn btn-date btn-datepicker btn-default date-item"
 							>
 								<time date=""></time>
 							</button>
@@ -116,6 +117,30 @@ export default {
 			default() {
 				return false;
 			}
+		},
+		mutedClass: {
+			type: String,
+			default() {
+				return "muted";
+			}
+		},
+		disabledClass: {
+			type: String,
+			default() {
+				return "disabled";
+			}
+		},
+		pickedClass: {
+			type: String,
+			default() {
+				return "picked";
+			}
+		},
+		highlightedClass: {
+			type: String,
+			default() {
+				return "highlighted";
+			}
 		}
 	},
 	data() {
@@ -135,7 +160,7 @@ export default {
 	},
 	computed: {
 		/**
-		 * @desc get the yearFirst option from the parent 
+		 * @desc get the yearFirst option from the parent
 		 		and return the display format for the month and year
 		 * @param none
 		 * @return String: monthFormat
@@ -236,8 +261,8 @@ export default {
 			return isAvailable;
 		},
 		/**
-		 * @desc return new date from referenced date and number 
-		 * @param 
+		 * @desc return new date from referenced date and number
+		 * @param
 		 		<object> dateToCheck: the date to be checked, refers to the navDate
 		 		<number> num: the number of month to be added/substracted from currently
 		 				viewed month
@@ -248,8 +273,8 @@ export default {
 			return returnDate.date(num);
 		},
 		/**
-		 * @desc check the current date and the number of month to be added/substracted 
-		 * @param 
+		 * @desc check the current date and the number of month to be added/substracted
+		 * @param
 		 		<object> dateToCheck: the date to be checked, refers to the navDate
 		 		<number> num: the number of month to be added/substracted from currently
 		 				viewed month

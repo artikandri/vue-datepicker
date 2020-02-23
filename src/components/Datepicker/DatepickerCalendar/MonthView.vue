@@ -6,7 +6,7 @@
 					<div class="calendar-nav-previous-month">
 						<button
 							type="button"
-							class="btn btn-ghost btn-icon"
+							class="btn btn-datepicker btn-default btn-icon"
 							:disabled="!canChangeNavYear(navDate, -1)"
 							@click="changeNavYear(-1)"
 						>
@@ -15,7 +15,7 @@
 					</div>
 					<button
 						type="button"
-						class="btn btn-datepicker"
+						class="btn btn-datepicker btn-default"
 						name="monthButton"
 						@click="$emit('click:monthButton', 0)"
 					>
@@ -25,7 +25,7 @@
 					</button>
 					<div class="calendar-nav-next-month">
 						<button
-							class="btn btn-ghost btn-icon"
+							class="btn btn-datepicker btn-default btn-icon"
 							type="button"
 							:disabled="!canChangeNavYear(navDate, 1)"
 							@click="changeNavYear(1)"
@@ -44,7 +44,7 @@
 							>
 								<button
 									type="button"
-									class="btn btn-month month-item"
+									class="btn btn-month btn-default btn-datepicker month-item"
 									:disabled="!month.available"
 									@click="selectMonth(month)"
 								>
@@ -80,6 +80,30 @@ export default {
 			type: Object,
 			default() {
 				return {};
+			}
+		},
+		mutedClass: {
+			type: String,
+			default() {
+				return "muted";
+			}
+		},
+		disabledClass: {
+			type: String,
+			default() {
+				return "disabled";
+			}
+		},
+		pickedClass: {
+			type: String,
+			default() {
+				return "picked";
+			}
+		},
+		highlightedClass: {
+			type: String,
+			default() {
+				return "highlighted";
 			}
 		}
 	},

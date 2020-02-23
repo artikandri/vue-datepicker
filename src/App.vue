@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div id="app" class="datepicker-container">
 		<datepicker
 			ref="datepicker"
 			v-model="date"
@@ -33,7 +33,7 @@ export default {
 			},
 			container: true,
 			inline: false,
-			trigger: false,
+			trigger: true,
 			autoShow: true,
 			autoHide: false,
 			date: ""

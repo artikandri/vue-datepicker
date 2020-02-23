@@ -6,6 +6,10 @@
 			:datepicker-options="datepickerOptions"
 			:year-first="yearFirst"
 			:auto-hide="autoHide"
+			:muted-class="mutedClass"
+			:disabled-class="disabledClass"
+			:highlighted-class="highlightedClass"
+			:picked-class="pickedClass"
 			@input:date="setDateValue"
 			@click:date-item="$emit('click:date-item')"
 			@click:dateButton="setStep"
@@ -14,6 +18,10 @@
 			v-show="step == 1"
 			:value="value"
 			:datepicker-options="datepickerOptions"
+			:muted-class="mutedClass"
+			:disabled-class="disabledClass"
+			:highlighted-class="highlightedClass"
+			:picked-class="pickedClass"
 			@input:date="setDateValue"
 			@click:monthButton="setStep"
 		/>
@@ -21,6 +29,10 @@
 			v-show="step == 0"
 			:value="value"
 			:datepicker-options="datepickerOptions"
+			:muted-class="mutedClass"
+			:disabled-class="disabledClass"
+			:highlighted-class="highlightedClass"
+			:picked-class="pickedClass"
 			@input:date="setDateValue"
 			@click:yearButton="setStep"
 		/>
@@ -62,6 +74,30 @@ export default {
 			type: Boolean,
 			default() {
 				return false;
+			}
+		},
+		mutedClass: {
+			type: String,
+			default() {
+				return "muted";
+			}
+		},
+		disabledClass: {
+			type: String,
+			default() {
+				return "disabled";
+			}
+		},
+		pickedClass: {
+			type: String,
+			default() {
+				return "picked";
+			}
+		},
+		highlightedClass: {
+			type: String,
+			default() {
+				return "highlighted";
 			}
 		}
 	},

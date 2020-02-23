@@ -1,5 +1,5 @@
 <template>
-	<div class="datepicker-wrapper">
+	<div class="datepicker-wrapper" v-click-outside="turnOffPopoverHover">
 		<!--start of datepicker input-->
 		<datepicker-input
 			ref="datepickerInput"
@@ -30,6 +30,10 @@
 				:datepicker-options="datepickerOptions"
 				:year-first="yearFirst"
 				:auto-hide="autoHide"
+				:muted-class="mutedClass"
+				:disabled-class="disabledClass"
+				:highlighted-class="highlightedClass"
+				:picked-class="pickedClass"
 			></datepicker-calendar>
 		</datepicker-popover>
 		<!--end of datepicker popover-->
@@ -45,6 +49,10 @@
 				:datepicker-options="datepickerOptions"
 				:year-first="yearFirst"
 				:auto-hide="autoHide"
+				:muted-class="mutedClass"
+				:disabled-class="disabledClass"
+				:highlighted-class="highlightedClass"
+				:picked-class="pickedClass"
 			></datepicker-calendar>
 		</datepicker-container>
 		<!--end of datepicker container-->
@@ -173,12 +181,53 @@ export default {
 		 * @return <bool>: true or false
 		 */
 		yearFirst: {
-			/*
-
-			*/
 			type: Boolean,
 			default() {
 				return false;
+			}
+		},
+		/**
+		 * @desc Class for muted date item
+		 * @param none
+		 * @return <bool>: true or false
+		 */
+		mutedClass: {
+			type: String,
+			default() {
+				return "muted";
+			}
+		},
+		/**
+		 * @desc Class for picked date item
+		 * @param none
+		 * @return <bool>: true or false
+		 */
+		pickedClass: {
+			type: String,
+			default() {
+				return "picked";
+			}
+		},
+		/**
+		 * @desc Class for disabled date item
+		 * @param none
+		 * @return <bool>: true or false
+		 */
+		disabledClass: {
+			type: String,
+			default() {
+				return "disabled";
+			}
+		},
+		/**
+		 * @desc Class for muted date item
+		 * @param none
+		 * @return <bool>: true or false
+		 */
+		highlightedClass: {
+			type: String,
+			default() {
+				return "highlighted";
 			}
 		}
 	},
@@ -337,10 +386,7 @@ export default {
 					let prevent = [
 						"btn-datepicker",
 						"btn-datepicker-icon",
-						"btn-year",
-						"datepicker-popover",
-						"btn-month",
-						"btn-date"
+						"datepicker-popover__popup"
 					];
 
 					let hasSlices = false;
