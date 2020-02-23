@@ -1,0 +1,12 @@
+.calendar-year-list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+
+	margin: 0;
+	padding: 0;
+
+	.calendar-year-list__item {
+		list-style-type: none;
+		text-align: center;
+	}
+}

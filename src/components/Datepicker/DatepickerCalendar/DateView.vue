@@ -1,7 +1,7 @@
 <template>
-	<div class="datepicker-calendar calendar--date-view">
-		<div class="calendar">
-			<div class="calendar-nav">
+	<div class="datepicker-calendar datepicker--date">
+		<div class="calendar calendar--date">
+			<nav class="calendar-nav">
 				<div class="calendar-nav-previous-month">
 					<button
 						type="button"
@@ -35,8 +35,8 @@
 						<i class="fa fa-chevron-right"></i>
 					</button>
 				</div>
-			</div>
-			<div class="calendar-container">
+			</nav>
+			<main class="calendar-container">
 				<div class="calendar-header">
 					<ul class="calendar-week-list">
 						<li
@@ -59,20 +59,29 @@
 								type="button"
 								v-if="date.value !== 0"
 								@click="selectDate(date)"
-								class="date-item"
+								class="btn btn-date btn-datepicker date-item"
 								:disabled="!date.available"
 							>
-								{{ date.value }}
+								<time
+									:date="date.value"
+									:month="navDate.format('MMMM')"
+									:year="navDate.format('YYYY')"
+								>
+									{{ date.value }}
+								</time>
 							</button>
 							<button
 								type="button"
+								disabled
 								v-if="date.value === 0"
-								class="date-item btn btn-date"
-							></button>
+								class="btn btn-date btn-datepicker date-item"
+							>
+								<time date=""></time>
+							</button>
 						</li>
 					</ul>
 				</div>
-			</div>
+			</main>
 		</div>
 	</div>
 </template>

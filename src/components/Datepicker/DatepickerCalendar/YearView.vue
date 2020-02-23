@@ -1,8 +1,8 @@
 <template>
 	<div class="">
-		<div class="datepicker-calendar calendar--date-view">
-			<div class="calendar">
-				<div class="calendar-nav">
+		<div class="datepicker-calendar datepicker--year">
+			<div class="calendar calendar--year">
+				<nav class="calendar-nav">
 					<div class="calendar-nav-previous-year">
 						<button
 							type="button"
@@ -13,9 +13,11 @@
 							<i class="fa fa-chevron-left"></i>
 						</button>
 					</div>
-					{{ fromYear }}
-					-
-					{{ toYear }}
+					<time :from="fromYear" :to="toYear">
+						{{ fromYear }}
+						-
+						{{ toYear }}
+					</time>
 					<div class="calendar-nav-next-year">
 						<button
 							type="button"
@@ -26,27 +28,29 @@
 							<i class="fa fa-chevron-right"></i>
 						</button>
 					</div>
-				</div>
-				<div class="calendar-container">
+				</nav>
+				<main class="calendar-container">
 					<div class="calendar-body">
-						<ul class="calendar-date calendar-date-list">
+						<ul class="calendar-date calendar-year-list">
 							<li
-								class="calendar-date-list__item"
+								class="calendar-year-list__item"
 								:key="'year' + idx"
-								@click="selectYear(year)"
 								v-for="(year, idx) in yearsArr"
 							>
 								<button
 									type="button"
+									@click="selectYear(year)"
 									class="btn btn-year year-item"
 									:disabled="!year.available"
 								>
-									{{ year.value }}
+									<time :year="year.value">
+										{{ year.value }}
+									</time>
 								</button>
 							</li>
 						</ul>
 					</div>
-				</div>
+				</main>
 			</div>
 		</div>
 	</div>

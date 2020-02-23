@@ -1,0 +1,11 @@
+.calendar-month-list {
+	padding: 0;
+	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+
+	.calendar-month-list__item {
+		list-style-type: none;
+		text-align: center;
+	}
+}

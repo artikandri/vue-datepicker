@@ -1,8 +1,8 @@
 <template>
 	<div class="">
-		<div class="datepicker-calendar calendar--date-view">
-			<div class="calendar">
-				<div class="calendar-nav">
+		<div class="datepicker-calendar datepicker--month">
+			<div class="calendar calendar--month">
+				<nav class="calendar-nav">
 					<div class="calendar-nav-previous-month">
 						<button
 							type="button"
@@ -14,10 +14,14 @@
 						</button>
 					</div>
 					<button
+						type="button"
+						class="btn btn-datepicker"
 						name="monthButton"
 						@click="$emit('click:monthButton', 0)"
 					>
-						{{ navDate.format("YYYY") }}
+						<time :year="navDate.format('YYYY')">
+							{{ navDate.format("YYYY") }}
+						</time>
 					</button>
 					<div class="calendar-nav-next-month">
 						<button
@@ -29,21 +33,27 @@
 							<i class="fa fa-chevron-right"></i>
 						</button>
 					</div>
-				</div>
+				</nav>
 				<div class="calendar-container">
 					<div class="calendar-body">
-						<ul class="calendar-date calendar-date-list">
+						<ul class="calendar-date calendar-month-list">
 							<li
-								class="calendar-date-list__item"
+								class="calendar-month-list__item"
 								:key="'month' + idx"
-								@click="selectMonth(month)"
 								v-for="(month, idx) in monthsArr"
 							>
 								<button
+									type="button"
 									class="btn btn-month month-item"
 									:disabled="!month.available"
+									@click="selectMonth(month)"
 								>
-									{{ month.value }}
+									<time
+										:month="month.value"
+										:year="navDate.format('YYYY')"
+									>
+										{{ month.value }}
+									</time>
 								</button>
 							</li>
 						</ul>

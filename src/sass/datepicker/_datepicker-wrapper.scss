@@ -26,3 +26,8 @@
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	@include fontSize(1);
 }
+
+.datepicker-calendar .calendar-nav {
+	display: flex;
+	justify-content: space-between;
+}
