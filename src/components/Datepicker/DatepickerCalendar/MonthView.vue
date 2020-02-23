@@ -3,10 +3,10 @@
 		<div class="datepicker-calendar datepicker--month">
 			<div class="calendar calendar--month">
 				<nav class="calendar-nav">
-					<div class="calendar-nav-previous-month">
+					<div class="calendar-nav__prev">
 						<button
 							type="button"
-							class="btn btn-datepicker btn-default btn-icon"
+							class="btn btn-datepicker btn-light btn-icon"
 							:disabled="!canChangeNavYear(navDate, -1)"
 							@click="changeNavYear(-1)"
 						>
@@ -15,7 +15,7 @@
 					</div>
 					<button
 						type="button"
-						class="btn btn-datepicker btn-default"
+						class="btn btn-datepicker btn-light"
 						name="monthButton"
 						@click="$emit('click:monthButton', 0)"
 					>
@@ -26,9 +26,9 @@
 							{{ navDate.format("YYYY") }}
 						</time>
 					</button>
-					<div class="calendar-nav-next-month">
+					<div class="calendar-nav__next">
 						<button
-							class="btn btn-datepicker btn-default btn-icon"
+							class="btn btn-datepicker btn-light btn-icon"
 							type="button"
 							:disabled="!canChangeNavYear(navDate, 1)"
 							@click="changeNavYear(1)"
@@ -47,7 +47,7 @@
 							>
 								<button
 									type="button"
-									class="btn btn-month btn-default btn-datepicker month-item"
+									class="btn btn-month btn-light btn-datepicker month-item"
 									:disabled="!month.available"
 									@click="selectMonth(month)"
 								>

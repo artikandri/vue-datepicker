@@ -2,10 +2,10 @@
 	<div class="datepicker-calendar datepicker--date">
 		<div class="calendar calendar--date">
 			<nav class="calendar-nav">
-				<div class="calendar-nav-previous-month">
+				<div class="calendar-nav__prev">
 					<button
 						type="button"
-						class="btn btn-datepicker btn-nav btn-icon"
+						class="btn btn-datepicker btn-light btn-icon"
 						:disabled="!canChangeNavMonth(navDate, -1)"
 						@click="
 							changeNavMonth(-1);
@@ -15,23 +15,25 @@
 						<i class="fa fa-chevron-left" aria-hidden="true"></i>
 					</button>
 				</div>
-				<button
-					type="button"
-					name="dateButton"
-					class="btn btn-datepicker btn-default"
-					@click="$emit('click:dateButton', 0)"
-				>
-					<time
-						class="btn-datepicker__time"
-						:month-year="navDate.format(monthFormat)"
-					>
-						{{ navDate.format(monthFormat) }}
-					</time>
-				</button>
-				<div class="calendar-nav-next-month">
+				<div class="calendar-nav__current">
 					<button
 						type="button"
-						class="btn btn-datepicker btn-icon"
+						name="dateButton"
+						class="btn btn-datepicker btn-icon btn-light"
+						@click="$emit('click:dateButton', 0)"
+					>
+						<time
+							class="btn-datepicker__time"
+							:month-year="navDate.format(monthFormat)"
+						>
+							{{ navDate.format(monthFormat) }}
+						</time>
+					</button>
+				</div>
+				<div class="calendar-nav__next">
+					<button
+						type="button"
+						class="btn btn-datepicker btn-light btn-icon"
 						:disabled="!canChangeNavMonth(navDate, 1)"
 						@click="
 							changeNavMonth(1);
@@ -65,7 +67,7 @@
 								type="button"
 								v-if="date.value !== 0"
 								@click="selectDate(date)"
-								class="btn btn-date btn-datepicker btn-default date-item"
+								class="btn btn-date btn-datepicker btn-light date-item"
 								:disabled="!date.available"
 							>
 								<time
@@ -81,7 +83,7 @@
 								type="button"
 								disabled
 								v-if="date.value === 0"
-								class="btn btn-date btn-datepicker btn-default date-item"
+								class="btn btn-date btn-datepicker btn-light date-item"
 							>
 								<time
 									class="btn-datepicker__time"

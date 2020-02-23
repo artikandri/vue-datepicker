@@ -1,3 +1,5 @@
 .datepicker-calendar {
-	@include fontSize(0.875);
+	@include fontSize(0.75);
+	line-height: $line-height;
 }
+

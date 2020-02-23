@@ -1,3 +1,23 @@
+.datepicker-calendar.datepicker--date {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	position: relative;
+
+	.calendar-nav {
+	}
+}
+
+.datepicker-calendar.datepicker--date .calendar-nav {
+	display: flex;
+	justify-content: space-between;
+
+	.calendar-nav__prev,
+	.calendar-nav__next {
+		width: 30px;
+	}
+}
+
 .calendar-week-list,
 .calendar-date-list {
 	display: grid;
@@ -8,5 +28,26 @@
 	> li {
 		list-style-type: none;
 		text-align: center;
+		background-color: $brand-white;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+	}
+}
+
+.calendar-date-list {
+	.calendar-date-list__item {
+		height: 30px;
+		width: 30px;
+		display: flex;
+
+		> .btn-datepicker {
+			text-align: center;
+			padding: 0;
+			width: 100%;
+		}
 	}
 }

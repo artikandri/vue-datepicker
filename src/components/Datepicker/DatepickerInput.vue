@@ -1,9 +1,7 @@
 <template>
 	<div class="datepicker-form">
 		<div class="form-group datepicker-form__form-group">
-			<div
-				class="datepicker-form__input-group input-group input-group--append"
-			>
+			<div class="datepicker-form__input-group input-group ">
 				<input
 					type="text"
 					aria-label="date input"
@@ -17,19 +15,21 @@
 					@focus="toggleDatepickerInputFocus(true)"
 					@change="setDateValue"
 				/>
-				<button
-					type="button"
-					name="datepickerButton"
-					:disabled="!trigger"
-					class="btn btn-datepicker btn-default datepicker-form__button"
-					@click="toggleDatepickerPopoverOnTrigger"
-				>
-					<i
-						class="fa fa-calendar btn-datepicker__icon"
-						name="datepickerButtonIcon"
-						aria-hidden="true"
-					></i>
-				</button>
+				<div class="input-group-append">
+					<button
+						type="button"
+						name="datepickerButton"
+						:disabled="!trigger"
+						class="btn btn-datepicker btn-light datepicker-form__button"
+						@click="toggleDatepickerPopoverOnTrigger"
+					>
+						<i
+							class="fa fa-calendar btn-datepicker__icon"
+							name="datepickerButtonIcon"
+							aria-hidden="true"
+						></i>
+					</button>
+				</div>
 			</div>
 		</div>
 		<small v-show="showWarning" class="datepicker-form__error  text-danger">

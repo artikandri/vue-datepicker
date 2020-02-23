@@ -6,7 +6,7 @@
 					<div class="calendar-nav-previous-year">
 						<button
 							type="button"
-							class="btn btn-datepicker btn-default btn-icon"
+							class="btn btn-datepicker btn-light btn-icon"
 							:disabled="!canChangeNavYear(navDate, -4)"
 							@click="changeNavYear(-4)"
 						>
@@ -21,7 +21,7 @@
 					<div class="calendar-nav-next-year">
 						<button
 							type="button"
-							class="btn btn-datepicker btn-default btn-icon"
+							class="btn btn-datepicker btn-light btn-icon"
 							:disabled="!canChangeNavYear(navDate, 4)"
 							@click="changeNavYear(4)"
 						>
@@ -40,7 +40,7 @@
 								<button
 									type="button"
 									@click="selectYear(year)"
-									class="btn btn-year btn-default year-item btn-datepicker"
+									class="btn btn-year btn-light year-item btn-datepicker"
 									:disabled="!year.available"
 								>
 									<time

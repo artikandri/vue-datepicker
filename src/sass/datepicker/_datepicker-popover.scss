@@ -12,11 +12,12 @@
 	background: $brand-white;
 	border: 1px solid rgba(166, 168, 179, 0.2);
 	color: $text-color;
-	padding: 20px;
+	// padding: 20px;
 	box-sizing: border-box;
 	border-radius: 4px;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 	z-index: 2;
+	border-top-color: $brand-primary;
 
 	&::before {
 		bottom: 100%;
