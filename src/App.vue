@@ -1,7 +1,7 @@
 <template>
 	<div id="app" class="datepicker">
 		<div class="datepicker-example">
-			<div class="input-group">
+			<div class="input-group is-append">
 				<datepicker
 					ref="datepicker"
 					v-model="date"

@@ -6,4 +6,4 @@ $textColors: (
 	dark: $brand-dark
 );
 
-@include createBemStyling("color", $textColors, "text");
+@include create2DBemStyling("color", $textColors, "text");

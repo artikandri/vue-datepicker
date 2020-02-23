@@ -117,6 +117,15 @@ export default {
 				}
 			}
 		}, 500)
+	},
+	watch: {
+		value() {
+			this.showWarning = false;
+			this.warningText = "";
+			this.$nextTick(() => {
+				this.$forceUpdate();
+			});
+		}
 	}
 };
 </script>

@@ -16,3 +16,15 @@
 	}
 }
 
+@mixin create2DBemStyling(
+	$propertyName,
+	$propertyValues,
+	$className,
+	$isImportant: true
+) {
+	@each $valueName, $value in $propertyValues {
+		.#{$className}-#{$valueName} {
+			#{$propertyName}: #{$value} #{if($isImportant, "!important", "")};
+		}
+	}
+}

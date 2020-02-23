@@ -15,6 +15,13 @@
 		border-color: transparent;
 	}
 
+	&.is-append {
+		input {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+
 	.input-group-append {
 		> .btn {
 			border-top-left-radius: 0;
