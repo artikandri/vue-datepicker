@@ -45,8 +45,8 @@ export default {
 				startDate: "29-01-2020",
 				endDate: "28-02-2021"
 			},
-			container: true,
-			inline: true,
+			container: false,
+			inline: false,
 			trigger: false,
 			autoShow: true,
 			autoHide: false,

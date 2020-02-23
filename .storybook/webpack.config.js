@@ -7,7 +7,9 @@ module.exports = {
 			"@": path.resolve(__dirname, "../src/"),
 			"@components": path.resolve(__dirname, "../src/components/"),
 			"@sass": path.resolve(__dirname, "../src/sass/"),
-			"@mixins": path.resolve(__dirname, "../src/mixins/")
+			"@mixins": path.resolve(__dirname, "../src/mixins/"),
+			"@directives": path.resolve(__dirname, "../src/directives/"),
+			"@helpers": path.resolve(__dirname, "../src/helpers/")
 		}
 	},
 	module: {

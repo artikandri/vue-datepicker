@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="datepicker-wrapper"
-		v-click-outside.native="turnOffPopoverHover"
-	>
+	<div class="datepicker-wrapper" v-click-outside="turnOffPopoverHover">
 		<!--start of datepicker input-->
 		<datepicker-input
 			ref="datepickerInput"
@@ -43,7 +40,7 @@
 		<!--end of datepicker popover-->
 
 		<!--start of datepicker container-->
-		<datepicker-container ref="datepickerContainer" v-show="container">
+		<datepicker-container ref="datepickerContainer" v-if="container">
 			<datepicker-calendar
 				ref="datepickerCalendar"
 				v-if="isContainerShown"
@@ -276,16 +273,11 @@ export default {
 		 * @return <bool>: true or false
 		 */
 		showPopover() {
-			let showPopover = false;
-			if (this.inline) {
-				showPopover = false;
-			} else {
-				showPopover =
-					(this.isPopoverShown || this.isPopoverTriggered) &&
-					!this.isContainerShown &&
-					!this.isPopoverDestroyed;
-			}
-			return showPopover;
+			return (
+				(this.isPopoverShown || this.isPopoverTriggered) &&
+				!this.isContainerShown &&
+				!this.isPopoverDestroyed
+			);
 		},
 		/**
 		 * @desc Show/hide the container based on the inline and the container value.
@@ -406,12 +398,14 @@ export default {
 		 */
 		turnOffPopoverHover($event) {
 			this.$nextTick(() => {
-				if ($event && $event.currentTarget) {
-					const targetClass = String($event.currentTarget.className);
+				if ($event && $event.target) {
+					const targetClass = String($event.target.className);
 					let prevent = [
 						"datepicker-input",
 						"btn-datepicker",
-						"datepicker-popover",
+						"btn",
+						"btn-datepicker__time",
+						"btn-datepicker__icon",
 						"datepicker-popover__popup"
 					];
 
@@ -601,7 +595,7 @@ export default {
 				this.isPopoverHovered = false;
 			} else {
 				throw new Error(
-					"(Datepicker.vue) Error in showing the popover: The inline prop is enabled"
+					"(Datepicker.vue) Error in showing the popover: Please tick off the inline option first"
 				);
 			}
 		},
