@@ -401,33 +401,22 @@ export default {
 				if ($event && $event.target) {
 					const targetClass = String($event.target.className);
 					let prevent = [
+						"datepicker-input",
 						"btn-datepicker",
+						"btn",
 						"btn-datepicker__time",
 						"btn-datepicker__icon",
 						"datepicker-popover__popup"
 					];
 
 					let hasSlices = false;
-					if (this.trigger) {
-						hasSlices = _.intersection(
-							prevent,
-							targetClass.split(" ")
-						).length;
-
-						if (!hasSlices) {
-							this.isPopoverTriggered = false;
-						}
-					} else {
-						prevent = prevent.concat(["datepicker-input"]);
-						hasSlices = _.intersection(
-							prevent,
-							targetClass.split(" ")
-						).length;
-					}
+					hasSlices = _.intersection(prevent, targetClass.split(" "))
+						.length;
 
 					if (!hasSlices) {
 						this.isFocused = false;
 						this.isPopoverHovered = false;
+						this.isPopoverTriggered = false;
 					}
 				} else {
 					throw new Error(
@@ -453,6 +442,18 @@ export default {
 			}
 		},
 		/**
+		 * @desc Toggle the datepicker popover state
+		 * @param none
+		 * @return none
+		 */
+		togglePopover() {
+			if (this.isFocused) {
+				this.hide();
+			} else {
+				this.show();
+			}
+		},
+		/**
 		 * @desc Toggle the value required to show/hide popover, when it is in trigger mode
 		 * @param none
 		 * @return none
@@ -461,8 +462,10 @@ export default {
 			if (this.trigger) {
 				this.isPopoverTriggered = !this.isPopoverTriggered;
 				this.$nextTick(() => {
-					if (this.isPopoverShown && !this.isPopoverTriggered) {
+					if (!this.isPopoverTriggered) {
 						this.isFocused = false;
+					} else {
+						this.isFocused = true;
 					}
 				});
 			} else {

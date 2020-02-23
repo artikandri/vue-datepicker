@@ -56,7 +56,7 @@ export default {
 	methods: {
 		toggleDatepickerPopup() {
 			if (this.$refs.datepicker) {
-				this.$refs.datepicker.togglePopoverOnTrigger();
+				this.$refs.datepicker.togglePopover();
 			}
 		}
 	}

@@ -136,13 +136,23 @@ export default {
 		 */
 		monthClass(month = {}) {
 			let todayMonth = moment().format("MMM");
+			let todayYear = moment().format("YYYY");
+
 			let currentMonth = this.navDate.format("MMM");
+			let currentYear = this.navDate.format("YYYY");
+
+			let monthToCheck = `${month.value}-${currentYear}`;
+
 			let highlightedClass =
-				todayMonth == month.value ? this.highlightedClass : "";
+				`${todayMonth}-${todayYear}` == monthToCheck
+					? this.highlightedClass
+					: "";
 			let availableClass = month.available ? "" : this.disabledClass;
 			let mutedClass = month.available ? "" : this.mutedClass;
 			let pickedClass =
-				currentMonth == month.value ? this.pickedClass : "";
+				`${currentMonth}-${currentYear}` == monthToCheck
+					? this.pickedClass
+					: "";
 
 			let monthClass = `${highlightedClass} ${availableClass} ${mutedClass} ${pickedClass}`;
 			return monthClass;

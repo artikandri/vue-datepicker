@@ -1,36 +1,19 @@
 <template>
 	<div class="datepicker-form">
 		<div class="form-group datepicker-form__form-group">
-			<div class="datepicker-form__input-group input-group ">
-				<input
-					type="text"
-					aria-label="date input"
-					class="datepicker-form__input datepicker-input "
-					placeholder="Pick a date"
-					:value="date"
-					:readonly="trigger"
-					:disabled="trigger"
-					@enter="setDateValue"
-					@blur="toggleDatepickerInputFocus(false)"
-					@focus="toggleDatepickerInputFocus(true)"
-					@change="setDateValue"
-				/>
-				<div class="input-group-append">
-					<button
-						type="button"
-						name="datepickerButton"
-						:disabled="!trigger"
-						class="btn btn-datepicker btn-light datepicker-form__button"
-						@click="toggleDatepickerPopoverOnTrigger"
-					>
-						<i
-							class="fa fa-calendar btn-datepicker__icon"
-							name="datepickerButtonIcon"
-							aria-hidden="true"
-						></i>
-					</button>
-				</div>
-			</div>
+			<input
+				type="text"
+				aria-label="date input"
+				class="datepicker-form__input datepicker-input "
+				placeholder="Pick a date"
+				:value="date"
+				:readonly="trigger"
+				:disabled="trigger"
+				@enter="setDateValue"
+				@blur="toggleDatepickerInputFocus(false)"
+				@focus="toggleDatepickerInputFocus(true)"
+				@change="setDateValue"
+			/>
 		</div>
 		<small v-show="showWarning" class="datepicker-form__error  text-danger">
 			{{ warningText }}
@@ -90,16 +73,11 @@ export default {
 			}
 		},
 		/**
-		 * @desc check the dateString validity by comparing it with the format
-		 * @param String: dateString
-		 * @return bool: true or false
+		 * @desc check whether a date is still within the range or not
+		 * @param <string> date: date to check
+		 * @return <bool> isWithinRange: true or false
 		 */
-		toggleDatepickerPopoverOnTrigger() {
-			if (this.trigger) {
-				this.$emit("click:datepickerInputButton");
-			}
-		},
-		isWithinRange(dateString) {
+		isWithinRange(dateString = "") {
 			let { startDate, endDate, format } = this.datepickerOptions;
 			let isWithinRange = this.timeMixin__canChangeNav(
 				{
@@ -112,6 +90,11 @@ export default {
 
 			return isWithinRange;
 		},
+		/**
+		 * @desc gets event on input, check it, and emit the input if the date is valid
+		 * @param <object> $event: contains the inputted date
+		 * @return none
+		 */
 		setDateValue: _.debounce(function($event) {
 			let dateValue = $event.target.value;
 			let { startDate, endDate, format } = this.datepickerOptions;
