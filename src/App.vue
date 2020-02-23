@@ -1,15 +1,28 @@
 <template>
-	<div id="app" class="datepicker-container">
-		<datepicker
-			ref="datepicker"
-			v-model="date"
-			:auto-show="autoShow"
-			:auto-hide="autoHide"
-			:trigger="trigger"
-			:inline="inline"
-			:container="container"
-			:options="options"
-		></datepicker>
+	<div id="app" class="datepicker">
+		<div class="datepicker-example">
+			<div class="input-group">
+				<datepicker
+					ref="datepicker"
+					v-model="date"
+					:auto-show="autoShow"
+					:auto-hide="autoHide"
+					:trigger="trigger"
+					:inline="inline"
+					:container="container"
+					:options="options"
+				></datepicker>
+				<div class="input-group-append">
+					<button
+						type="button"
+						@click="toggleDatepickerPopup"
+						class="btn btn-datepicker btn-primary"
+					>
+						<i class="fa fa-calendar"></i>
+					</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -40,7 +53,13 @@ export default {
 		};
 	},
 	mounted() {},
-	methods: {}
+	methods: {
+		toggleDatepickerPopup() {
+			if (this.$refs.datepicker) {
+				this.$refs.datepicker.togglePopoverOnTrigger();
+			}
+		}
+	}
 };
 </script>
 

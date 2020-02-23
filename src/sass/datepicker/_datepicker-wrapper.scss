@@ -2,7 +2,27 @@
 	display: block;
 	position: relative;
 	font-family: $font-family-sans-serif;
+	width: 100%;
 	@include fontSize(1);
+}
+
+.datepicker-example .input-group {
+	display: flex;
+	justify-content: space-between;
+
+	> * {
+		z-index: 1;
+		border-color: transparent;
+	}
+
+	.input-group-append {
+		> .btn {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			border-color: $input-border-color;
+			border-left-color: transparent;
+		}
+	}
 }
 
 .datepicker-calendar .calendar-nav {

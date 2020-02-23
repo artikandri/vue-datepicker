@@ -460,6 +460,11 @@ export default {
 		togglePopoverOnTrigger() {
 			if (this.trigger) {
 				this.isPopoverTriggered = !this.isPopoverTriggered;
+				this.$nextTick(() => {
+					if (this.isPopoverShown && !this.isPopoverTriggered) {
+						this.isFocused = false;
+					}
+				});
 			} else {
 				throw new Error(
 					"(Datepicker.vue) Error in toggling popover on trigger: The trigger prop is not enabled."
