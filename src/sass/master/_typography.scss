@@ -6,4 +6,31 @@ $textColors: (
 	dark: $brand-dark
 );
 
+$textAlignments: ("center", "left", "right");
+
+$headings: (
+	h1: 3.5,
+	h2: 3,
+	h3: 2.5,
+	h4: 2,
+	h5: 1.5,
+	h6: 1
+);
+
+@mixin createHeadings($headings: $headings) {
+	@each $heading, $multiplier in $headings {
+		.text-#{$heading} {
+			font-family: $font-family-sans-serif;
+			@include fontSize($multiplier);
+		}
+
+		#{$heading} {
+			font-family: $font-family-sans-serif;
+			@include fontSize($multiplier);
+		}
+	}
+}
+
+@include createBemStyling("text-align", $textAlignments, "text");
 @include create2DBemStyling("color", $textColors, "text");
+@include createHeadings($headings);

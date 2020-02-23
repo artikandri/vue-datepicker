@@ -1,7 +1,24 @@
 .datepicker-documentation {
 	height: 100%;
-	width: 100%;
 	padding: 50px;
-	text-align: center;
 	background-color: $brand-primary-200;
+	font-family: $font-family-sans-serif;
+	line-height: $line-height;
+}
+
+// default documentation
+.datepicker-documentation.datepicker-documentation--default {
+	.datepicker.datepicker-example {
+		&.datepicker--popover {
+			position: relative;
+			display: block;
+			z-index: 1;
+		}
+
+		&.datepicker--inline {
+			position: relative;
+			display: block;
+			z-index: 0;
+		}
+	}
 }

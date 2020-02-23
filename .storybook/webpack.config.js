@@ -4,6 +4,7 @@ const path = require("path");
 module.exports = {
 	resolve: {
 		alias: {
+			"~story": path.resolve(__dirname, "../story/"),
 			"@": path.resolve(__dirname, "../src/"),
 			"@components": path.resolve(__dirname, "../src/components/"),
 			"@sass": path.resolve(__dirname, "../src/sass/"),

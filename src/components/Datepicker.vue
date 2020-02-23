@@ -1,5 +1,8 @@
 <template>
-	<div class="datepicker-wrapper" v-click-outside="turnOffPopoverHover">
+	<div
+		class="datepicker-wrapper"
+		v-click-outside.native="turnOffPopoverHover"
+	>
 		<!--start of datepicker input-->
 		<datepicker-input
 			ref="datepickerInput"
