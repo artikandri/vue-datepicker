@@ -3,7 +3,7 @@
 		<div class="datepicker-calendar datepicker--year">
 			<div class="calendar calendar--year">
 				<nav class="calendar-nav">
-					<div class="calendar-nav-previous-year">
+					<div class="calendar-nav__prev">
 						<button
 							type="button"
 							class="btn btn-datepicker btn-light btn-icon"
@@ -13,12 +13,14 @@
 							<i class="fa fa-chevron-left"></i>
 						</button>
 					</div>
-					<time :from="fromYear" :to="toYear">
-						{{ fromYear }}
-						-
-						{{ toYear }}
-					</time>
-					<div class="calendar-nav-next-year">
+					<div class="calendar-nav__current">
+						<time :from="fromYear" :to="toYear">
+							{{ fromYear }}
+							-
+							{{ toYear }}
+						</time>
+					</div>
+					<div class="calendar-nav__next">
 						<button
 							type="button"
 							class="btn btn-datepicker btn-light btn-icon"

@@ -38,10 +38,18 @@
 	}
 }
 
+.calendar-week-list {
+	.calendar-week-list__item {
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
 .calendar-date-list {
 	.calendar-date-list__item {
 		height: 30px;
-		width: 30px;
 		display: flex;
 
 		> .btn-datepicker {

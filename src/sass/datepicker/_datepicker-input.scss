@@ -1,3 +1,25 @@
+.datepicker-wrapper .datepicker-form {
+	display: block;
+	position: relative;
+}
+
+.datepicker-wrapper .datepicker-form__input-group {
+	display: flex;
+}
+
+.datepicker-form .datepicker-form__input {
+	display: block;
+	width: 100%;
+	padding: 0.375rem 0.75rem;
+	line-height: $line-height;
+	color: $text-color;
+	background-color: $brand-white;
+	border: 1px solid $input-border-color;
+	border-radius: $border-radius;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	@include fontSize(1);
+}
+
 .datepicker-form {
 	.datepicker-input {
 	}

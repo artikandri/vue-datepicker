@@ -13,19 +13,21 @@
 							<i class="fa fa-chevron-left"></i>
 						</button>
 					</div>
-					<button
-						type="button"
-						class="btn btn-datepicker btn-light"
-						name="monthButton"
-						@click="$emit('click:monthButton', 0)"
-					>
-						<time
-							class="btn-datepicker__time"
-							:year="navDate.format('YYYY')"
+					<div class="calendar-nav__current">
+						<button
+							type="button"
+							class="btn btn-datepicker btn-light"
+							name="monthButton"
+							@click="$emit('click:monthButton', 0)"
 						>
-							{{ navDate.format("YYYY") }}
-						</time>
-					</button>
+							<time
+								class="btn-datepicker__time"
+								:year="navDate.format('YYYY')"
+							>
+								{{ navDate.format("YYYY") }}
+							</time>
+						</button>
+					</div>
 					<div class="calendar-nav__next">
 						<button
 							class="btn btn-datepicker btn-light btn-icon"

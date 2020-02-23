@@ -8,11 +8,10 @@
 	// left: 0;
 	// top: calc(100% + 10px);
 	position: relative;
-	max-width: 500px;
+	display: block;
 	background: $brand-white;
 	border: 1px solid rgba(166, 168, 179, 0.2);
 	color: $text-color;
-	// padding: 20px;
 	box-sizing: border-box;
 	border-radius: 4px;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
@@ -28,7 +27,6 @@
 		width: 0;
 		position: absolute;
 		pointer-events: none;
-
 		border-bottom-color: rgba(166, 168, 179, 0.2);
 		border-width: 8px;
 		margin-left: -8px;

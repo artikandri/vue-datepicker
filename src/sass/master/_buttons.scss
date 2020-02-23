@@ -32,6 +32,7 @@ $buttons: (
 						darken(map-get($buttonValue, "base"), 20%)
 					)};
 				transition: background-color ease-in 0.3s;
+				cursor: pointer;
 			}
 		}
 
@@ -45,6 +46,10 @@ $buttons: (
 
 .btn.btn-datepicker {
 	border-radius: $border-radius;
+
+	&[disabled="disabled"] {
+		cursor: auto;
+	}
 }
 
 @include createBemStylingForButtons($buttons);
