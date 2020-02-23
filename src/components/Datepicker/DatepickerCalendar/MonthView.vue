@@ -45,6 +45,7 @@
 							<li
 								class="calendar-month-list__item"
 								:key="'month' + idx"
+								:class="monthClass(month)"
 								v-for="(month, idx) in monthsArr"
 							>
 								<button
@@ -126,7 +127,26 @@ export default {
 		this.setNavDateValue();
 		this.setMonths();
 	},
+	computed: {},
 	methods: {
+		/**
+		 * @desc check the datepicker options and the selected month value
+		 * @param <object> selected month
+		 * @return <string>  class name for selected month: highlighted, muted, ...
+		 */
+		monthClass(month = {}) {
+			let todayMonth = moment().format("MMM");
+			let currentMonth = this.navDate.format("MMM");
+			let highlightedClass =
+				todayMonth == month.value ? this.highlightedClass : "";
+			let availableClass = month.available ? "" : this.disabledClass;
+			let mutedClass = month.available ? "" : this.mutedClass;
+			let pickedClass =
+				currentMonth == month.value ? this.pickedClass : "";
+
+			let monthClass = `${highlightedClass} ${availableClass} ${mutedClass} ${pickedClass}`;
+			return monthClass;
+		},
 		/**
 		 * @desc set the nav date value on first load
 		 * @param none

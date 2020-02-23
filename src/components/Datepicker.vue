@@ -21,6 +21,7 @@
 			@mouseover.native="isPopoverHovered = true"
 			v-click-outside.native="turnOffPopoverHover"
 			v-if="showPopover"
+			:style="datepickerPopoverStyle"
 		>
 			<datepicker-calendar
 				ref="datepickerCalendar"
@@ -251,6 +252,22 @@ export default {
 	},
 	computed: {
 		/**
+		 * @desc Check the datepickerOptions and generate the style for popover
+		 * @param none
+		 * @return <string> popover style
+		 */
+		datepickerPopoverStyle() {
+			let { offset, zIndex } = this.datepickerOptions;
+			let popoverStyle = "";
+			let offsetStyle = offset
+				? `margin-top: ${offset}px; `
+				: `margin-top: 0px; `;
+			let zIndexStyle = zIndex ? `z-index: ${zIndex}; ` : `z-index: 1; `;
+
+			popoverStyle = `${offsetStyle} ${zIndexStyle}`;
+			return popoverStyle;
+		},
+		/**
 		 * @desc Show/hide the popover based on multiple params
 		 * @param none
 		 * @return <bool>: true or false
@@ -334,7 +351,7 @@ export default {
 				language: "en",
 				startView: 0,
 				weekStart: 0,
-				offset: 0,
+				offset: 5,
 				zIndex: 1000
 			};
 
@@ -475,8 +492,8 @@ export default {
 		/**
 		 * @desc get currently picked date. defaults to today
 		 * @param <bool> formatted:  true or false
-		 * @return 
-		 		<string> date:  
+		 * @return
+		 		<string> date:
 			 		UTC format (Sep 22 ..... (Indochina Time))
 			 		or readable format (defaults to DD/MM/YYYY)
 		 */
@@ -500,8 +517,8 @@ export default {
 		/**
 		 * @desc get currently picked month name. defaults to this month.
 		 * @param <bool> shorten: true or false
-		 * @return 
-		 		<string> month name: 
+		 * @return
+		 		<string> month name:
 		 			original (ex: February) or shortened (ex: Feb)
 		 */
 		getMonthName(shorten = false) {
@@ -612,7 +629,7 @@ export default {
 			}
 		},
 		/**
-		 * @desc reset the input value, hides the popover when active, 
+		 * @desc reset the input value, hides the popover when active,
 		 		 and reset the calendar back to its original state
 		 * @param none
 		 * @return none

@@ -38,6 +38,7 @@
 								class="calendar-year-list__item"
 								:key="'year' + idx"
 								v-for="(year, idx) in yearsArr"
+								:class="yearClass(year)"
 							>
 								<button
 									type="button"
@@ -152,6 +153,23 @@ export default {
 		}
 	},
 	methods: {
+		/**
+		 * @desc check the datepicker options and the selected year value
+		 * @param <object> selected year
+		 * @return <string>  class name for selected year: highlighted, muted, ...
+		 */
+		yearClass(year = {}) {
+			let todayYear = moment().format("YYYY");
+			let currentYear = this.navDate.format("YYYY");
+			let highlightedClass =
+				todayYear == year.value ? this.highlightedClass : "";
+			let availableClass = year.available ? "" : this.disabledClass;
+			let mutedClass = year.available ? "" : this.mutedClass;
+			let pickedClass = currentYear == year.value ? this.pickedClass : "";
+
+			let yearClass = `${highlightedClass} ${availableClass} ${mutedClass} ${pickedClass}`;
+			return yearClass;
+		},
 		/**
 		 * @desc set the nav date value by checking the value first
 		 * @param none

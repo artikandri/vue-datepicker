@@ -28,7 +28,7 @@ export default {
 			options: {
 				language: "id",
 				format: "DD-MM-YYYY",
-				startDate: "29-03-2020",
+				startDate: "29-01-2020",
 				endDate: "28-02-2021"
 			},
 			container: true,

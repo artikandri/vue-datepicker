@@ -57,5 +57,22 @@
 			padding: 0;
 			width: 100%;
 		}
+
+		&.picked > .btn {
+			color: $brand-primary;
+			background-color: $brand-primary-200;
+		}
+
+		&.muted > .btn {
+			color: $text-disabled;
+		}
+
+		&.disabled > .btn {
+			color: $text-disabled;
+		}
+
+		&.highlighted > .btn {
+			color: $brand-primary;
+		}
 	}
 }

@@ -62,6 +62,7 @@
 							class="calendar-date-list__item"
 							:key="'date' + idx"
 							v-for="(date, idx) in gridArr"
+							:class="dateClass(date)"
 						>
 							<button
 								type="button"
@@ -158,6 +159,7 @@ export default {
 		return {
 			weekDaysArr: [],
 			gridArr: [],
+			current: moment(),
 			navDate: moment()
 		};
 	},
@@ -182,6 +184,31 @@ export default {
 		}
 	},
 	methods: {
+		/**
+		 * @desc check the datepicker options and the selected year value
+		 * @param <object> selected year
+		 * @return <string>  class name for selected year: highlighted, muted, ...
+		 */
+		dateClass(date = {}) {
+			const navDate = _.cloneDeep(this.navDate);
+
+			let todayDate = moment().format("DD-MM-YYYY");
+			let dateToCheck = navDate
+				.set({ date: date.value })
+				.format("DD-MM-YYYY");
+
+			let highlightedClass =
+				todayDate == dateToCheck ? this.highlightedClass : "";
+			let availableClass = date.available ? "" : this.disabledClass;
+			let mutedClass = date.available ? "" : this.mutedClass;
+			let pickedClass =
+				this.navDate.format("DD-MM-YYYY") == dateToCheck
+					? this.pickedClass
+					: "";
+
+			let dateClass = `${highlightedClass} ${availableClass} ${mutedClass} ${pickedClass}`;
+			return dateClass;
+		},
 		/**
 		 * @desc set the navDate value based on the value and format from parent
 		 * @param none
