@@ -574,6 +574,7 @@ export default {
 		show() {
 			if (!this.inline) {
 				this.isFocused = true;
+				this.isPopoverHovered = false;
 				this.$nextTick(() => {
 					this.isPopoverDestroyed = false;
 				});
@@ -591,6 +592,7 @@ export default {
 		hide() {
 			if (!this.inline) {
 				this.isFocused = false;
+				this.isPopoverHovered = false;
 			} else {
 				throw new Error(
 					"(Datepicker.vue) Error in showing the popover: Please tick off the inline option first"

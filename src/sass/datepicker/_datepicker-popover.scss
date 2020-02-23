@@ -4,9 +4,6 @@
 }
 
 .datepicker-popover__popup {
-	// position: absolute;
-	// left: 0;
-	// top: calc(100% + 10px);
 	position: relative;
 	display: block;
 	background: $brand-white;
@@ -19,16 +16,15 @@
 	border-top-color: $brand-primary;
 
 	&::before {
-		bottom: 100%;
-		left: 30%;
-		border: solid transparent;
+		border: 5px solid transparent;
 		content: " ";
+		display: block;
 		height: 0;
-		width: 0;
 		position: absolute;
-		pointer-events: none;
-		border-bottom-color: rgba(166, 168, 179, 0.2);
-		border-width: 8px;
-		margin-left: -8px;
+		width: 0;
+		border-top: 0;
+		left: 10px;
+		top: -5px;
+		border-bottom-color: $brand-primary;
 	}
 }
