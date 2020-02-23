@@ -385,7 +385,8 @@ export default {
 					const targetClass = String($event.target.className);
 					let prevent = [
 						"btn-datepicker",
-						"btn-datepicker-icon",
+						"btn-datepicker__time",
+						"btn-datepicker__icon",
 						"datepicker-popover__popup"
 					];
 

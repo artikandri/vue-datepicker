@@ -25,7 +25,7 @@
 					@click="toggleDatepickerPopoverOnTrigger"
 				>
 					<i
-						class="fa fa-calendar btn-datepicker-icon"
+						class="fa fa-calendar btn-datepicker__icon"
 						name="datepickerButtonIcon"
 						aria-hidden="true"
 					></i>

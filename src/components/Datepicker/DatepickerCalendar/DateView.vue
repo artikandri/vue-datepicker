@@ -21,7 +21,12 @@
 					class="btn btn-datepicker btn-default"
 					@click="$emit('click:dateButton', 0)"
 				>
-					{{ navDate.format(monthFormat) }}
+					<time
+						class="btn-datepicker__time"
+						:month-year="navDate.format(monthFormat)"
+					>
+						{{ navDate.format(monthFormat) }}
+					</time>
 				</button>
 				<div class="calendar-nav-next-month">
 					<button
@@ -64,6 +69,7 @@
 								:disabled="!date.available"
 							>
 								<time
+									class="btn-datepicker__time"
 									:date="date.value"
 									:month="navDate.format('MMMM')"
 									:year="navDate.format('YYYY')"
@@ -77,7 +83,10 @@
 								v-if="date.value === 0"
 								class="btn btn-date btn-datepicker btn-default date-item"
 							>
-								<time date=""></time>
+								<time
+									class="btn-datepicker__time"
+									date=""
+								></time>
 							</button>
 						</li>
 					</ul>

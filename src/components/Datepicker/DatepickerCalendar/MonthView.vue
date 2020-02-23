@@ -19,7 +19,10 @@
 						name="monthButton"
 						@click="$emit('click:monthButton', 0)"
 					>
-						<time :year="navDate.format('YYYY')">
+						<time
+							class="btn-datepicker__time"
+							:year="navDate.format('YYYY')"
+						>
 							{{ navDate.format("YYYY") }}
 						</time>
 					</button>
@@ -49,6 +52,7 @@
 									@click="selectMonth(month)"
 								>
 									<time
+										class="btn-datepicker__time"
 										:month="month.value"
 										:year="navDate.format('YYYY')"
 									>

@@ -43,7 +43,10 @@
 									class="btn btn-year btn-default year-item btn-datepicker"
 									:disabled="!year.available"
 								>
-									<time :year="year.value">
+									<time
+										class="btn-datepicker__time"
+										:year="year.value"
+									>
 										{{ year.value }}
 									</time>
 								</button>
