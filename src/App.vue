@@ -10,6 +10,7 @@
 					:trigger="trigger"
 					:inline="inline"
 					:container="container"
+					:year-first="yearFirst"
 					:options="options"
 				></datepicker>
 				<div class="input-group-append">
@@ -45,10 +46,11 @@ export default {
 				endDate: "28-02-2021"
 			},
 			container: true,
-			inline: false,
-			trigger: true,
+			inline: true,
+			trigger: false,
 			autoShow: true,
 			autoHide: false,
+			yearFirst: false,
 			date: ""
 		};
 	},

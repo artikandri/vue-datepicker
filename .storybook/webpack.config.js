@@ -5,8 +5,23 @@ module.exports = {
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "../src/"),
-			"@components": path.resolve(__dirname, "../src/components/")
+			"@components": path.resolve(__dirname, "../src/components/"),
+			"@sass": path.resolve(__dirname, "../src/sass/"),
+			"@mixins": path.resolve(__dirname, "../src/mixins/")
 		}
+	},
+	module: {
+		rules: [
+			{
+				test: /\.(css|scss)$/,
+				use: ["style-loader", "css-loader", "sass-loader"]
+			},
+
+			{
+				test: /\.(eot|ttf|woff|woff2|svg)$/,
+				use: ["file-loader"]
+			}
+		]
 	},
 	plugins: [
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

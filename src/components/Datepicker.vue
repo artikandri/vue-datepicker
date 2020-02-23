@@ -1,5 +1,8 @@
 <template>
-	<div class="datepicker-wrapper" v-click-outside="turnOffPopoverHover">
+	<div
+		class="datepicker-wrapper"
+		v-click-outside.native="turnOffPopoverHover"
+	>
 		<!--start of datepicker input-->
 		<datepicker-input
 			ref="datepickerInput"
@@ -40,7 +43,7 @@
 		<!--end of datepicker popover-->
 
 		<!--start of datepicker container-->
-		<datepicker-container ref="datepickerContainer" v-if="container">
+		<datepicker-container ref="datepickerContainer" v-show="container">
 			<datepicker-calendar
 				ref="datepickerCalendar"
 				v-if="isContainerShown"
@@ -273,11 +276,16 @@ export default {
 		 * @return <bool>: true or false
 		 */
 		showPopover() {
-			return (
-				(this.isPopoverShown || this.isPopoverTriggered) &&
-				!this.isContainerShown &&
-				!this.isPopoverDestroyed
-			);
+			let showPopover = false;
+			if (this.inline) {
+				showPopover = false;
+			} else {
+				showPopover =
+					(this.isPopoverShown || this.isPopoverTriggered) &&
+					!this.isContainerShown &&
+					!this.isPopoverDestroyed;
+			}
+			return showPopover;
 		},
 		/**
 		 * @desc Show/hide the container based on the inline and the container value.
@@ -398,14 +406,12 @@ export default {
 		 */
 		turnOffPopoverHover($event) {
 			this.$nextTick(() => {
-				if ($event && $event.target) {
-					const targetClass = String($event.target.className);
+				if ($event && $event.currentTarget) {
+					const targetClass = String($event.currentTarget.className);
 					let prevent = [
 						"datepicker-input",
 						"btn-datepicker",
-						"btn",
-						"btn-datepicker__time",
-						"btn-datepicker__icon",
+						"datepicker-popover",
 						"datepicker-popover__popup"
 					];
 
@@ -595,7 +601,7 @@ export default {
 				this.isPopoverHovered = false;
 			} else {
 				throw new Error(
-					"(Datepicker.vue) Error in showing the popover: Please tick off the inline option first"
+					"(Datepicker.vue) Error in showing the popover: The inline prop is enabled"
 				);
 			}
 		},
@@ -606,11 +612,21 @@ export default {
 		 * @return none
 		 */
 		pick() {
-			let { format } = this.datepickerOptions;
+			let { startDate, endDate, format } = this.datepickerOptions;
+			let todayDate = moment().format(format);
 			let dateString = this.value
 				? moment(this.value, format).format(format)
 				: "";
-			let date = this.value ? dateString : moment().format(format);
+			let date = dateString;
+			let isWithinRange = this.timeMixin__canChangeNav(
+				{ startDate, endDate, dateString: todayDate },
+				{ format }
+			);
+			if (!dateString && isWithinRange) {
+				date = todayDate;
+			} else {
+				date = startDate;
+			}
 
 			this.$emit("input", date);
 		},
