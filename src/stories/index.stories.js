@@ -133,6 +133,21 @@ storiesOf("Datepicker", module)
     })
   )
   .add(
+    "Default Datepicker (Popover mode with predefined options: weekStart 1 (start from Monday))",
+    () => ({
+      components: { Datepicker },
+      data() {
+        return {
+          date: "",
+          options: {
+            weekStart: 1
+          }
+        };
+      },
+      template: '<datepicker v-model="date" :options="options" />'
+    })
+  )
+  .add(
     "Default Datepicker (Popover mode with predefined options: zIndex and offset)",
     () => ({
       components: { Datepicker },

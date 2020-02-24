@@ -43,7 +43,8 @@ export default {
 				language: "id",
 				format: "DD-MM-YYYY",
 				startDate: "29-01-2020",
-				endDate: "28-02-2021"
+				endDate: "28-02-2021",
+				weekStart: 2
 			},
 			container: false,
 			inline: false,

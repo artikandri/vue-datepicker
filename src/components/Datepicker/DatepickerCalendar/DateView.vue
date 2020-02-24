@@ -226,8 +226,14 @@ export default {
 		 * @return none
 		 */
 		setDatepickerLocale() {
-			let { language } = this.datepickerOptions;
-			moment.locale(language || "en");
+			let { language, weekStart } = this.datepickerOptions;
+			language = language || "en";
+			weekStart = weekStart || 0;
+			moment.updateLocale(language, {
+				week: {
+					dow: weekStart
+				}
+			});
 		},
 		/**
 		 * @desc set the dates array based on the navDate value
