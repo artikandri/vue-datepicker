@@ -23,6 +23,11 @@ module.exports = {
 			{
 				test: /\.(eot|ttf|woff|woff2|svg)$/,
 				use: ["file-loader"]
+			},
+			{
+				test: /\.vue$/,
+				loader: "storybook-addon-vue-info/loader",
+				enforce: "post"
 			}
 		]
 	},

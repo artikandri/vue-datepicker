@@ -226,8 +226,8 @@ export default {
 		 * @return none
 		 */
 		setDatepickerLocale() {
-			let localeString = this.datepickerOptions.language || "en";
-			moment.locale(localeString);
+			let { language } = this.datepickerOptions;
+			moment.locale(language || "en");
 		},
 		/**
 		 * @desc set the dates array based on the navDate value

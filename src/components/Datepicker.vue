@@ -74,30 +74,35 @@ export default {
 	name: "Datepicker",
 	mixins: [timeMixin],
 	props: {
+		/**
+		 * @desc
+				Value for datepicker. Defaults to empty string. 
+		 	The format must comply with the options format. Default format is DD/MM/YYYY
+		 * @param none
+		 * @return <bool>: true or false
+		 */
 		value: {
 			type: String,
-			default() {
-				return "";
-			}
+			default: ""
 		},
+		/**
+		 * @desc
+		 	Customized options for the datepicker
+			{
+				date: null,
+				format: "DD/MM/YYYY",
+				startDate: null,
+				endDate: null,
+				language: "en",
+				startView: 0,
+				weekStart: 0,
+				offset: 0,
+				zIndex: 1000
+			}
+		 * @param none
+		 * @return <object>
+		 */
 		options: {
-			/**
-			 * @desc
-			 	Customized options for the datepicker
-				{
-					date: null,
-					format: "DD/MM/YYYY",
-					startDate: null,
-					endDate: null,
-					language: "en",
-					startView: 0,
-					weekStart: 0,
-					offset: 0,
-					zIndex: 1000
-				}
-			 * @param none
-			 * @return <object>
-			 */
 			type: Object,
 			default() {
 				return {};
@@ -113,9 +118,7 @@ export default {
 			/*
 			 */
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
 		 * @desc
@@ -125,9 +128,7 @@ export default {
 		 */
 		trigger: {
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
 		 * @desc
@@ -138,22 +139,18 @@ export default {
 		 */
 		inline: {
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
 		 * @desc
 				Shows the calendar popup on first load.
-				Doesnt affect inline view.
+				Doesnt affect the view when the component is in inline mode.
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		autoShow: {
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
 		 * @desc
@@ -164,75 +161,67 @@ export default {
 		 */
 		autoHide: {
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
-		 * @desc Automatically set today date as default date. Only works on first run.
+		 * @desc
+				Automatically set today date as default date. Only works on first run.
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		autoPick: {
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
-		 * @desc Show the year before the month's name in the calendar month view's title
+		 * @desc
+				Show the year before the month's name in the calendar month view's title.
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		yearFirst: {
 			type: Boolean,
-			default() {
-				return false;
-			}
+			default: false
 		},
 		/**
-		 * @desc Class for muted date item
+		 * @desc
+				Class name for muted date/month/year item
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		mutedClass: {
 			type: String,
-			default() {
-				return "muted";
-			}
+			default: "muted"
 		},
 		/**
-		 * @desc Class for picked date item
+		 * @desc
+				Class name for picked date/month/year item
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		pickedClass: {
 			type: String,
-			default() {
-				return "picked";
-			}
+			default: "picked"
 		},
 		/**
-		 * @desc Class for disabled date item
+		 * @desc
+				Class name for disabled date/month/year item
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		disabledClass: {
 			type: String,
-			default() {
-				return "disabled";
-			}
+			default: "disabled"
 		},
 		/**
-		 * @desc Class for muted date item
+		 * @desc
+				Class name for highlighted date/month/year item
 		 * @param none
 		 * @return <bool>: true or false
 		 */
 		highlightedClass: {
 			type: String,
-			default() {
-				return "highlighted";
-			}
+			default: "highlighted"
 		}
 	},
 	components: {
@@ -355,7 +344,7 @@ export default {
 				startView: 0,
 				weekStart: 0,
 				offset: 5,
-				zIndex: 1000
+				zIndex: 10
 			};
 
 			let options = { ...this.options, ...{ startDate, endDate } };
