@@ -99,21 +99,28 @@ export default {
 			let dateValue = $event.target.value;
 			let { startDate, endDate, format } = this.datepickerOptions;
 			if (!this.trigger) {
-				if (this.checkInputValidity(dateValue)) {
-					this.showWarning = false;
-
-					if (this.isWithinRange(dateValue)) {
+				if (dateValue) {
+					if (this.checkInputValidity(dateValue)) {
 						this.showWarning = false;
 
-						this.$emit("change:setStep", 2);
-						this.$emit("update:datepickerInput", dateValue);
+						if (this.isWithinRange(dateValue)) {
+							this.showWarning = false;
+
+							this.$emit("change:setStep", 2);
+							this.$emit("update:datepickerInput", dateValue);
+						} else {
+							this.showWarning = true;
+							this.warningText = `Please  enter a date between ${startDate} to ${endDate}`;
+						}
 					} else {
 						this.showWarning = true;
-						this.warningText = `Please  enter a date between ${startDate} to ${endDate}`;
+						this.warningText = `Please enter the date in ${format} format`;
 					}
 				} else {
-					this.showWarning = true;
-					this.warningText = `Please enter the date in ${format} format`;
+					this.showWarning = false;
+
+					this.$emit("change:setStep", 2);
+					this.$emit("update:datepickerInput", "");
 				}
 			}
 		}, 500)
