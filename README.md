@@ -1,5 +1,7 @@
 # datepicker
 
+Supports npm version 8.5.0 / node 16.14.2
+
 ## Project setup
 
 ```
